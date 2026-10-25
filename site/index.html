@@ -1,0 +1,700 @@
+<title>Refonte Lionnel Balez Soudure</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Raleway:wght@400;500;600;700;800&family=Roboto+Condensed:wght@400;700&display=swap">
+<style>
+:root{
+  --bg:#f3f5f3; --surface:#ffffff; --surface-2:#e9ecea; --fg:#1d211f; --muted:#56605a; --line:#d5dbd7;
+  --green:#00ce6b; --green-2:#40e696; --green-ink:#007a3f; --on-green:#06170d;
+  --charcoal:#303030; --charcoal-fg:#f2f4f3; --plate:#ffffff; --note:#b4471b; --warn-bg:#fff4e5; --warn-fg:#7a3b00;
+  --shadow:0 1px 2px rgba(20,30,25,.06),0 8px 24px rgba(20,30,25,.08);
+  --f-body:"Raleway",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-cond:"Roboto Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-hand:"Caveat","Comic Sans MS","Bradley Hand",cursive;
+  --bar-h:56px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#131614; --surface:#1c201e; --surface-2:#252a27; --fg:#eef1ef; --muted:#a6afa9; --line:#343b37;
+  --green-ink:#3fe393; --on-green:#06170d; --charcoal:#0d0f0e; --charcoal-fg:#eef1ef; --plate:#f4f6f5;
+  --note:#ff9a6b; --warn-bg:#3a2a14; --warn-fg:#ffd59e; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#131614; --surface:#1c201e; --surface-2:#252a27; --fg:#eef1ef; --muted:#a6afa9; --line:#343b37;
+  --green-ink:#3fe393; --on-green:#06170d; --charcoal:#0d0f0e; --charcoal-fg:#eef1ef; --plate:#f4f6f5;
+  --note:#ff9a6b; --warn-bg:#3a2a14; --warn-fg:#ffd59e; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35); color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font:400 16px/1.6 var(--f-body);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--f-body);line-height:1.15;text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--green-ink)}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px;border-radius:4px}
+.skip{position:absolute;left:-9999px}.skip:focus{left:16px;top:8px;z-index:100;background:var(--surface);padding:8px 12px}
+.label{font:700 .78rem/1 var(--f-cond);letter-spacing:.12em;text-transform:uppercase;color:var(--green-ink)}
+.unofficial{display:inline-flex;align-items:center;gap:.5em;font:700 .72rem/1 var(--f-cond);letter-spacing:.1em;text-transform:uppercase;
+  background:var(--warn-bg);color:var(--warn-fg);border:1px solid currentColor;border-radius:999px;padding:.45em .8em;white-space:nowrap}
+.plate{background:var(--plate);border-radius:6px;display:inline-flex;align-items:center;padding:6px 10px}
+.plate img{display:block;height:auto}
+
+/* --- barre supérieure --- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.topbar-in{display:flex;align-items:center;gap:12px;min-height:var(--bar-h);max-width:1280px;margin:0 auto}
+.topbar .plate{padding:3px 6px}.topbar .plate img{width:118px}
+.topbar .unofficial{margin-right:auto;min-width:0;line-height:1.2;white-space:normal}
+.topbar .btn,.topbar .count{flex-shrink:0}
+.count{font:700 .9rem/1 var(--f-cond);color:var(--muted);white-space:nowrap}
+.btn{font:700 .85rem/1 var(--f-cond);letter-spacing:.06em;text-transform:uppercase;display:inline-flex;align-items:center;gap:.5em;
+  border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:.7em .9em;cursor:pointer;text-decoration:none}
+.btn:hover{border-color:var(--green)}
+.btn-green{background:var(--green);color:var(--on-green);border-color:var(--green)}
+.btn svg{width:1.1em;height:1.1em;flex:none}
+.progress{height:4px;background:var(--surface-2)}
+.progress i{display:block;height:100%;width:0;background:repeating-linear-gradient(135deg,var(--green) 0 10px,var(--green-2) 10px 20px);transition:width .35s ease}
+
+/* --- diapositives --- */
+main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 120px}
+.slide{max-width:1280px;margin:0 auto;animation:slideIn .45s ease both}
+@keyframes slideIn{from{transform:translateY(10px);opacity:.4}to{transform:none;opacity:1}}
+.slide-head{display:grid;gap:10px;margin-bottom:28px;max-width:62rem}
+.slide-head h2{font-size:clamp(1.7rem,3.6vw,2.7rem);font-weight:800;letter-spacing:-.01em}
+.slide-head p{color:var(--muted);font-size:1.05rem;max-width:65ch}
+.letter{font:700 .78rem/1 var(--f-cond);letter-spacing:.12em;color:var(--muted)}
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;min-width:0;box-shadow:var(--shadow)}
+.card h3{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+.card p,.card li{color:var(--muted)}
+.card ul{margin:0;padding-left:1.1em;display:grid;gap:6px}
+.src{font:400 .78rem/1.4 var(--f-cond);color:var(--muted);letter-spacing:.02em}
+.src::before{content:"Source : "}
+.tag{display:inline-block;font:700 .7rem/1 var(--f-cond);letter-spacing:.08em;text-transform:uppercase;border-radius:4px;padding:.35em .55em;background:var(--surface-2);color:var(--muted)}
+.tag-ok{background:color-mix(in srgb,var(--green) 18%,transparent);color:var(--green-ink)}
+.tag-warn{background:var(--warn-bg);color:var(--warn-fg)}
+.note{font:600 1.25rem/1.15 var(--f-hand);color:var(--note)}
+
+/* équerres vertes (code visuel du site d'origine) */
+.brackets{position:relative}
+.brackets::before,.brackets::after{content:"";position:absolute;width:42px;height:42px;border:4px solid var(--green);pointer-events:none}
+.brackets::before{left:-10px;top:-10px;border-right:0;border-bottom:0}
+.brackets::after{right:-10px;bottom:-10px;border-left:0;border-top:0}
+.stripe{height:10px;border-radius:2px;background:repeating-linear-gradient(135deg,var(--green) 0 12px,var(--green-2) 12px 24px)}
+
+/* cordon de soudure SVG */
+.weld{display:block;width:100%;height:18px;color:var(--green)}
+.weld path{stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 1.6s .2s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.spark line{stroke:var(--green);stroke-width:2;stroke-linecap:round;animation:spark 2.4s ease-in-out infinite;transform-origin:center}
+.spark line:nth-child(2n){animation-delay:.4s}.spark line:nth-child(3n){animation-delay:.9s}
+@keyframes spark{0%,100%{opacity:.25}50%{opacity:1}}
+
+/* --- navigation basse --- */
+.pager{position:fixed;left:0;right:0;bottom:0;z-index:20;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(8px);
+  border-top:1px solid var(--line);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));padding-top:10px}
+.pager-in{max-width:1280px;margin:0 auto;display:flex;gap:10px;justify-content:space-between;align-items:center}
+.pager .btn{max-width:48%;min-width:0}
+.pager .btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pager .kbd{color:var(--muted);font:400 .8rem/1.3 var(--f-cond);text-align:center}
+.pager .btn[disabled]{opacity:.4;cursor:default}
+
+/* --- sommaire --- */
+dialog.toc{border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--fg);padding:0;width:min(560px,calc(100vw - 32px));max-height:calc(100vh - 48px)}
+dialog.toc::backdrop{background:rgba(10,15,12,.55)}
+.toc-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.toc ol{list-style:none;margin:0;padding:8px;counter-reset:t}
+.toc li a{display:grid;grid-template-columns:2.2em 1fr;gap:8px;padding:10px 12px;border-radius:8px;color:var(--fg);text-decoration:none}
+.toc li a:hover,.toc li a[aria-current="true"]{background:var(--surface-2)}
+.toc li a[aria-current="true"] b{color:var(--green-ink)}
+.toc li b{font:700 .9rem/1.5 var(--f-cond);color:var(--muted)}
+
+/* --- maquettes (rendu proportionnel via unités cqw) --- */
+:root{--m-bg:#ffffff;--m-soft:#f5f6f5;--m-fg:#262a28;--m-muted:#6b726e;--m-line:#e3e6e4;--m-green:#00ce6b;--m-green-2:#40e696;--m-char:#303030}
+.frame{container-type:inline-size;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--m-bg);box-shadow:var(--shadow);min-width:0}
+.frame-bar{display:flex;gap:5px;align-items:center;padding:7px 10px;background:var(--surface-2);border-bottom:1px solid var(--line)}
+.frame-bar i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.frame-bar span{margin-left:8px;font:400 .72rem/1 var(--f-cond);color:var(--muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.mock{container-type:inline-size;color:var(--m-fg);background:var(--m-bg);font-family:var(--f-body)}
+.mock *{min-width:0}
+.mock img{display:block;width:100%;height:100%;object-fit:cover}
+.mock .cap{font:700 1.5cqw/1 var(--f-cond);letter-spacing:.1em;text-transform:uppercase;color:var(--m-green)}
+.m-strip{display:flex;justify-content:space-between;gap:2cqw;padding:.9cqw 4cqw;background:var(--m-soft);font-size:1.35cqw;color:var(--m-muted)}
+.m-strip b{color:var(--m-fg)}
+.m-head{display:flex;align-items:center;gap:2.4cqw;padding:1.6cqw 4cqw;border-bottom:1px solid var(--m-line)}
+.m-head .logo{width:20cqw;height:auto;flex:none}
+.m-head nav{display:flex;gap:2cqw;margin-left:auto;font:700 1.35cqw/1 var(--f-cond);text-transform:uppercase;letter-spacing:.04em}
+.m-btn{display:inline-flex;align-items:center;gap:.8cqw;background:var(--m-green);color:#06170d;font:700 1.45cqw/1 var(--f-cond);text-transform:uppercase;letter-spacing:.05em;padding:1.1cqw 1.8cqw;border-radius:.6cqw;white-space:nowrap}
+.m-btn.ghost{background:transparent;color:var(--m-fg);box-shadow:inset 0 0 0 .2cqw var(--m-fg)}
+.m-btn.dark{background:var(--m-char);color:#fff}
+.m-h1{font-weight:800;font-size:3.5cqw;line-height:1.1;letter-spacing:-.01em}
+.m-p{font-size:1.5cqw;line-height:1.5;color:var(--m-muted)}
+.m-br{position:relative}
+.m-br::before,.m-br::after{content:"";position:absolute;width:5cqw;height:5cqw;border:.55cqw solid var(--m-green)}
+.m-br::before{left:-1.4cqw;top:-1.4cqw;border-right:0;border-bottom:0}.m-br::after{right:-1.4cqw;bottom:-1.4cqw;border-left:0;border-top:0}
+.m-stripe{height:1cqw;background:repeating-linear-gradient(135deg,var(--m-green) 0 1.4cqw,var(--m-green-2) 1.4cqw 2.8cqw)}
+.m-foot{background:var(--m-char);color:#cfd3d1;padding:2.4cqw 4cqw;display:grid;grid-template-columns:repeat(3,1fr);gap:3cqw;font-size:1.35cqw}
+.m-foot b{display:block;color:var(--m-green);font:700 1.35cqw/1.2 var(--f-cond);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6cqw}
+.mock h4{font-weight:700;font-size:2cqw}
+/* téléphone */
+.phone{container-type:inline-size;width:min(100%,250px);margin:0 auto;border:9px solid #1b1d1c;border-radius:30px;overflow:hidden;background:var(--m-bg);box-shadow:var(--shadow)}
+.phone .mock{height:500px;overflow:hidden;position:relative}
+.phone .mock .cap{font-size:3.6cqw}
+.phone .m-h1{font-size:8cqw}.phone .m-p{font-size:4.4cqw}
+.phone .m-btn{font-size:4cqw;padding:3cqw 4cqw;border-radius:2cqw}
+.phone .m-head{padding:3cqw 4cqw}.phone .m-head .logo{width:45cqw}
+.burger{margin-left:auto;width:7cqw;height:5cqw;background:linear-gradient(var(--m-fg) 0 0) 0 0/100% 18% no-repeat,linear-gradient(var(--m-fg) 0 0) 0 50%/100% 18% no-repeat,linear-gradient(var(--m-fg) 0 0) 0 100%/100% 18% no-repeat}
+.callbar{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2cqw;padding:3cqw;background:var(--m-char)}
+.callbar span{display:flex;justify-content:center;align-items:center;gap:1.5cqw;padding:3cqw 0;border-radius:2cqw;font:700 3.6cqw/1 var(--f-cond);text-transform:uppercase;color:#fff;background:#4a4d4c}
+.callbar span:first-child{background:var(--m-green);color:#06170d}
+
+/* --- mise en page des diapositives propositions --- */
+.prop{display:grid;gap:22px;grid-template-columns:minmax(0,1fr) 270px;align-items:start}
+.prop > .full{grid-column:1/-1}
+@media (max-width:900px){.prop{grid-template-columns:minmax(0,1fr)}}
+.subgrid{display:grid;gap:22px;align-items:start;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+.fig{display:grid;gap:8px;min-width:0}
+.fig figcaption{font:700 .75rem/1 var(--f-cond);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+figure{margin:0}
+.why{border-left:4px solid var(--green);background:var(--surface);padding:18px 20px;border-radius:0 10px 10px 0}
+.why h3{font-size:1.05rem;margin-bottom:8px}
+.why ul{margin:0;padding-left:1.1em;display:grid;gap:6px;color:var(--muted)}
+.reco{display:inline-flex;gap:.5em;align-items:center;background:var(--green);color:var(--on-green);font:700 .75rem/1 var(--f-cond);letter-spacing:.1em;text-transform:uppercase;padding:.5em .8em;border-radius:4px}
+
+/* tableaux */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:700 .78rem/1.2 var(--f-cond);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+tr:last-child td{border-bottom:0}
+td code{font-size:.8rem;word-break:break-all;color:var(--muted)}
+.dots{letter-spacing:.15em;color:var(--green-ink);white-space:nowrap}
+.dots s{color:var(--line);text-decoration:none}
+.shot{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.shot img{display:block;width:100%;height:auto}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.thumbs img{aspect-ratio:1;object-fit:cover;border-radius:6px;width:100%;height:auto}
+.swatches{display:flex;flex-wrap:wrap;gap:10px}
+.sw{display:grid;gap:4px;font:400 .78rem/1.2 var(--f-cond);color:var(--muted)}
+.sw i{display:block;width:64px;height:44px;border-radius:6px;border:1px solid var(--line)}
+.cover{display:grid;gap:28px;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);align-items:center;min-height:calc(100vh - 220px)}
+@media (max-width:860px){.cover{grid-template-columns:minmax(0,1fr);min-height:0}}
+.cover h1{font-size:clamp(2.1rem,5.4vw,4.2rem);font-weight:800;letter-spacing:-.02em}
+.cover .plate img{width:min(320px,70vw)}
+.cover-photo{aspect-ratio:4/3;max-width:100%}
+.cover-photo img{width:100%;height:100%;object-fit:cover;border-radius:4px;display:block}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .weld path{stroke-dashoffset:0}
+}
+@media (max-width:560px){
+  .topbar .plate{display:none}
+  .pager .kbd{display:none}
+  .btn-label-long{display:none}
+}
+</style>
+
+<a class="skip" href="#deck">Aller au contenu</a>
+<header class="topbar">
+  <div class="topbar-in">
+    <span class="plate"><img src="assets/img/logo.png" alt="Lionnel Balez Soudure (logo d'origine)" width="392" height="100"></span>
+    <span class="unofficial">Proposition de refonte non officielle</span>
+    <span class="count" id="count" aria-live="polite">1 / 11</span>
+    <button class="btn" id="tocBtn" type="button" aria-haspopup="dialog" aria-controls="toc">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span class="btn-label-long">Sommaire</span></button>
+    <button class="btn" id="fsBtn" type="button" aria-label="Plein écran">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+  </div>
+  <div class="progress" role="progressbar" aria-label="Progression" aria-valuemin="1" aria-valuemax="11" aria-valuenow="1" id="progress"><i></i></div>
+</header>
+
+<dialog class="toc" id="toc" aria-label="Sommaire">
+  <div class="toc-head"><strong>Sommaire</strong><button class="btn" type="button" id="tocClose">Fermer</button></div>
+  <ol id="tocList"></ol>
+</dialog>
+
+<main id="deck">
+
+<!-- A · Couverture -->
+<section class="slide" id="couverture" data-title="Couverture">
+  <div class="cover">
+    <div class="grid" style="gap:22px">
+      <span class="plate" style="justify-self:start"><img src="assets/img/logo.png" alt="Logo Lionnel Balez Soudure, tel qu'il figure sur le site actuel" width="392" height="100"></span>
+      <span class="label">Chaudronnerie · Ferronnerie · Métallerie — Antrenas, Lozère</span>
+      <h1>Un site plus clair pour un savoir-faire en inox, alu et acier</h1>
+      <p style="color:var(--muted);font-size:1.1rem;max-width:56ch">Étude du site lionnelbalezsoudure.fr, trois pistes de refonte qui gardent la marque reconnaissable, et une démonstration navigable de la piste recommandée.</p>
+      <svg class="weld" viewBox="0 0 600 18" preserveAspectRatio="none" aria-hidden="true"><path d="M2 9 q10 -8 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
+      <div style="display:flex;flex-wrap:wrap;gap:10px">
+        <span class="unofficial">Proposition de refonte non officielle</span>
+        <span class="tag">Non commandée par l'entreprise</span>
+        <span class="tag">Démo non indexée</span>
+      </div>
+      <p class="src" style="max-width:60ch">pages publiques de lionnelbalezsoudure.fr consultées le 25/10/2026. Aucune modification n'a été faite sur le site public.</p>
+    </div>
+    <figure class="fig">
+      <div class="brackets cover-photo"><img src="assets/img/p2781-47.jpg" alt="Raccord en té inox à brides, photo publiée sur la page Chaudronnerie du site actuel" width="1400" height="1050"></div>
+      <figcaption>Photo du site actuel (page Chaudronnerie) · autorisation à obtenir</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- B · Le site aujourd'hui -->
+<section class="slide" id="site-actuel" data-title="Le site aujourd'hui">
+  <div class="slide-head"><span class="letter">B · CONSTATS VÉRIFIÉS</span><h2>Le site aujourd'hui</h2>
+    <p>Uniquement ce que nous avons pu lire dans les pages ou observer dans nos captures. Nous n'avons mesuré ni le trafic, ni la vitesse, ni le référencement : aucun chiffre de ce type n'est avancé ici.</p></div>
+  <div class="grid g3" style="margin-bottom:22px">
+    <figure class="fig"><div class="shot"><img src="assets/shots/orig-top.jpg" alt="Capture de l'accueil actuel : en-tête, zone de diaporama vide et bannière cookies" width="1200" height="750" loading="lazy"></div>
+      <figcaption>Accueil, 1440 × 900, capture du 25/10/2026</figcaption></figure>
+    <figure class="fig"><div class="shot"><img src="assets/shots/orig-home.jpg" alt="Capture de l'accueil actuel : barres d'activité et textes estompés pendant l'animation" width="1200" height="750" loading="lazy"></div>
+      <figcaption>Accueil, suite de la page</figcaption></figure>
+    <figure class="fig"><div class="shot" style="max-width:260px"><img src="assets/shots/orig-mobile.jpg" alt="Capture mobile de l'accueil actuel : en-tête lisible, diaporama vide, bannière cookies sur la moitié basse" width="390" height="900" loading="lazy"></div>
+      <figcaption>Accueil, 390 px de large</figcaption></figure>
+  </div>
+  <div class="grid g2">
+    <div class="card"><h3>Ce qui fonctionne</h3><ul>
+      <li>Le téléphone est visible en haut de chaque page, et un lien <code>tel:</code> est en place.</li>
+      <li>Les coordonnées complètes et les horaires sont dans le pied de page.</li>
+      <li>Il y a quatre pages de prestations, avec 165 photos de réalisations dans les diaporamas.</li>
+      <li>Le contenu de l'accueil est riche : thermolaquage, procédés, références, mobilier.</li>
+      <li>L'identité est forte : vert franc, équerres et logo métallique.</li></ul></div>
+    <div class="card"><h3>Ce que nous avons observé</h3><ul>
+      <li>Les titres de page indiquent « Marjevols » au lieu de « Marvejols », sur toutes les pages consultées.</li>
+      <li>Dans nos captures, la zone du diaporama d'accueil reste vide et la bannière cookies couvre une large partie de l'écran.</li>
+      <li>À 390 px, la mise en page tient dans la largeur, mais la bannière cookies occupe environ la moitié de l'écran et le titre d'accueil n'apparaît qu'en filigrane sous le diaporama vide.</li>
+      <li>Les textes apparaissent estompés tant que l'animation d'entrée n'est pas terminée.</li>
+      <li>Les barres d'activité affichent « 0% » dans le code et ne portent aucune information.</li>
+      <li>Les pages de prestations se résument à un titre, un diaporama et une phrase.</li></ul></div>
+    <div class="card"><h3>Mentions et données</h3><ul>
+      <li>Le champ « Siren » contient un SIRET à 14 chiffres (798 322 863 00019).</li>
+      <li>L'hébergeur n'est pas indiqué.</li>
+      <li>Le paragraphe « Déclaration à la CNIL » et la recommandation d'Internet Explorer sont datés.</li>
+      <li>La politique de confidentialité est le modèle WordPress générique : commentaires, médias, comptes.</li>
+      <li>Le pied de page indique « ® 2017 ».</li></ul>
+      <p class="src" style="margin-top:10px">/mentions-legales/, /politiques-de-confidentialites/, pied de page</p></div>
+    <div class="card"><h3>Contradictions et pages fermées</h3><ul>
+      <li>Le mobilier est présenté « en acier et en inox » sur l'accueil, mais « en alu et en inox » dans le titre de la page Mobilier.</li>
+      <li>Le texte parle de « nos équipes », alors que les mentions ne nomment qu'une personne : l'effectif est à confirmer.</li>
+      <li>La page /statistiques-clients/ est protégée par mot de passe ; nous n'y avons pas eu accès.</li>
+      <li>La photo de soudure du diaporama d'accueil (lionnelbalez.jpg) ne ressemble pas aux photos de chantier. C'est peut-être une image d'illustration, à vérifier.</li></ul></div>
+  </div>
+</section>
+
+<!-- C · Ce que nous conservons -->
+<section class="slide" id="conserve" data-title="Ce que nous conservons">
+  <div class="slide-head"><span class="letter">C · CONTINUITÉ</span><h2>Ce que nous conservons</h2>
+    <p>Le logo n'est pas redessiné. Les couleurs, les polices et les motifs viennent de la feuille de style du site actuel. Seuls la typographie, les espacements, le contraste, la mise en valeur des photos, la navigation et les boutons de contact évoluent.</p></div>
+  <div class="grid g2">
+    <div class="card grid" style="gap:16px"><h3>Identité</h3>
+      <span class="plate" style="justify-self:start"><img src="assets/img/logo.png" alt="Logo d'origine" width="392" height="100" style="width:240px"></span>
+      <div class="swatches">
+        <div class="sw"><i style="background:#00ce6b"></i>#00ce6b · vert principal</div>
+        <div class="sw"><i style="background:#40e696"></i>#40e696 · vert clair</div>
+        <div class="sw"><i style="background:#303030"></i>#303030 · pied de page</div>
+        <div class="sw"><i style="background:#f7f7f7"></i>#f7f7f7 · fonds</div>
+      </div>
+      <p><span style="font-family:var(--f-body);font-weight:700;font-size:1.3rem">Raleway</span> pour les textes et titres · <span style="font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.06em">Roboto Condensed</span> pour le menu et les étiquettes</p>
+      <p class="src">feuilles de style 389-layout.css et polices chargées par le site</p></div>
+    <div class="card grid" style="gap:16px"><h3>Codes visuels repris</h3>
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:18px;align-items:center">
+        <div class="brackets" style="height:76px;background:var(--surface-2);margin:10px"></div><p>Les équerres vertes en coins opposés, autour des photos et des blocs clés.</p>
+        <div class="stripe"></div><p>Les barres rayées en diagonale, utilisées pour séparer les sections et marquer la progression (et non plus pour de faux pourcentages).</p>
+        <div style="font:700 .9rem/1 var(--f-cond);text-transform:uppercase;letter-spacing:.06em">Chaudronnerie</div><p>Le menu en capitales condensées et les titres verts du pied de page.</p>
+      </div>
+      <p class="note">+ un cordon de soudure et quelques étincelles en vectoriel, en clin d'œil au métier.</p></div>
+    <div class="card"><h3>Contenus repris intégralement</h3><ul>
+      <li>Les textes d'accueil : présentation, engagements, thermolaquage, procédés et agréments, mobilier, références.</li>
+      <li>Les 4 pages détaillées : chaudronnerie (aluminium et inox), ferronnerie-chaudronnerie thermolaquée, ferronnerie inox, mobilier.</li>
+      <li>Les coordonnées, les horaires, l'itinéraire vers l'atelier et Facebook.</li>
+      <li>Les mentions légales, avec les corrections signalées « à confirmer ».</li></ul></div>
+    <div class="card"><h3>Le ton</h3><ul>
+      <li>Le « nous » de l'entreprise et le « vous » du client.</li>
+      <li>Les formules d'origine sont gardées : « Devis gratuit », « Conseils personnalisés », « Travail soigné », « Respect des délais », « Livraison gratuite de pièces sur site ».</li>
+      <li>Les affirmations du site (« plus de 20 ans », « plus de 200 réalisations ») restent attribuées au site actuel et sont marquées à confirmer. Nous n'en ajoutons aucune.</li></ul></div>
+  </div>
+</section>
+
+<!-- D1 · Proposition 1 -->
+<section class="slide" id="proposition-1" data-title="Proposition 1 · L'évolution fidèle">
+  <div class="slide-head"><span class="letter">D · PROPOSITION 1 / 3</span><h2>L'évolution fidèle</h2>
+    <p>On garde la structure que les clients connaissent (bandeau coordonnées, logo à gauche, menu condensé, pied de page anthracite) et on la remet au propre. Le texte d'accueil arrive en premier, une vraie photo de chantier l'accompagne, et les quatre prestations sont présentées en cartes.</p>
+    <span class="reco" style="justify-self:start">Piste recommandée · démo construite</span></div>
+  <div class="prop">
+    <figure class="fig"><figcaption>Accueil · ordinateur</figcaption>
+      <div class="frame"><div class="frame-bar"><i></i><i></i><i></i><span>Accueil — L'évolution fidèle</span></div>
+      <div class="mock">
+        <div class="m-strip"><span>L'Arjal <b>48100 Antrenas</b> · Lun.–ven. 8 h 00 – 18 h 30</span><b>06 79 93 57 93</b></div>
+        <div class="m-head"><img class="logo" src="assets/img/logo.png" alt="" width="392" height="100"><nav><span>Chaudronnerie</span><span>Thermolaquage</span><span>Inox</span><span>Mobilier</span><span>Réalisations</span><span>Contact</span></nav></div>
+        <div style="display:grid;grid-template-columns:1.05fr .95fr;gap:5cqw;padding:5cqw 4cqw 4cqw;align-items:center">
+          <div style="display:grid;gap:1.8cqw"><span class="cap">Antrenas · Marvejols · Mende</span>
+            <div class="m-h1">Un chaudronnier, ferronnier, métallier à votre service en Lozère</div>
+            <p class="m-p">Lionnel Balez Soudure, implanté à Antrenas, près de Marvejols et Mende, vous offre son savoir-faire en chaudronnerie, ferronnerie et métallerie.</p>
+            <div style="display:flex;gap:1.4cqw"><span class="m-btn">Appeler · 06 79 93 57 93</span><span class="m-btn ghost">Voir les réalisations</span></div></div>
+          <div class="m-br" style="aspect-ratio:4/3"><img src="assets/img/p2939-21.jpg" alt=""></div>
+        </div>
+        <div class="m-stripe"></div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:1cqw;padding:2cqw 4cqw;background:var(--m-soft);font:700 1.35cqw/1.2 var(--f-cond);text-transform:uppercase;text-align:center">
+          <span>Devis gratuit</span><span>Conseils personnalisés</span><span>Travail soigné</span><span>Respect des délais</span><span>Livraison gratuite sur site</span></div>
+        <div class="m-foot"><div><b>Lionnel Balez Soudure</b>L'Arjal, 48100 Antrenas</div><div><b>Nos horaires</b>Lundi au vendredi, 8:00 – 18:30</div><div><b>Nous contacter</b>06 79 93 57 93<br>lionnel.balez@gmail.com</div></div>
+      </div></div></figure>
+    <figure class="fig"><figcaption>Mobile · 390 px</figcaption>
+      <div class="phone"><div class="mock">
+        <div class="m-head"><img class="logo" src="assets/img/logo.png" alt="" width="392" height="100"><span class="burger"></span></div>
+        <div style="padding:5cqw;display:grid;gap:4cqw"><span class="cap">Antrenas · Lozère</span>
+          <div class="m-h1">Un chaudronnier, ferronnier, métallier à votre service</div>
+          <div class="m-br" style="aspect-ratio:4/3;margin:2cqw"><img src="assets/img/p2939-21.jpg" alt=""></div>
+          <p class="m-p">Chaudronnerie, ferronnerie et métallerie près de Marvejols et Mende.</p></div>
+        <div class="callbar"><span>Appeler</span><span>E-mail</span><span>Plan</span></div>
+      </div></div></figure>
+    <div class="subgrid full">
+      <figure class="fig"><figcaption>Section prestations</figcaption>
+        <div class="frame"><div class="mock" style="padding:4cqw;display:grid;gap:3cqw;background:var(--m-soft)">
+          <span class="cap">Nos savoir-faire</span>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:3cqw">
+            <div style="background:#fff;border-radius:1cqw;overflow:hidden"><div style="aspect-ratio:16/9"><img src="assets/img/p2781-62.jpg" alt=""></div><div style="padding:2.4cqw"><h4 style="font-size:4cqw">Chaudronnerie</h4><p class="m-p" style="font-size:3cqw">Aluminium et inox</p></div></div>
+            <div style="background:#fff;border-radius:1cqw;overflow:hidden"><div style="aspect-ratio:16/9"><img src="assets/img/p2866-13.jpg" alt=""></div><div style="padding:2.4cqw"><h4 style="font-size:4cqw">Thermolaquage</h4><p class="m-p" style="font-size:3cqw">Ferronnerie, chaudronnerie</p></div></div>
+            <div style="background:#fff;border-radius:1cqw;overflow:hidden"><div style="aspect-ratio:16/9"><img src="assets/img/p2939-6.jpg" alt=""></div><div style="padding:2.4cqw"><h4 style="font-size:4cqw">Ferronnerie inox</h4><p class="m-p" style="font-size:3cqw">Inox, alu, acier</p></div></div>
+            <div style="background:#fff;border-radius:1cqw;overflow:hidden"><div style="aspect-ratio:16/9"><img src="assets/img/p2965-4.jpg" alt=""></div><div style="padding:2.4cqw"><h4 style="font-size:4cqw">Mobilier</h4><p class="m-p" style="font-size:3cqw">Tables, chaises, jardin</p></div></div>
+          </div></div></div></figure>
+      <figure class="fig"><figcaption>Bloc contact</figcaption>
+        <div class="frame"><div class="mock" style="padding:5cqw;display:grid;gap:3cqw;background:var(--m-char);color:#fff">
+          <span class="cap">Nous contacter</span>
+          <div style="font:800 7cqw/1 var(--f-body)">06 79 93 57 93</div>
+          <div style="font-size:3.4cqw;color:#cfd3d1">lionnel.balez@gmail.com</div>
+          <div style="display:flex;gap:2cqw;flex-wrap:wrap"><span class="m-btn" style="font-size:3cqw;padding:2cqw 3cqw">Appeler</span><span class="m-btn ghost" style="font-size:3cqw;padding:2cqw 3cqw;color:#fff;box-shadow:inset 0 0 0 .4cqw #fff">Écrire</span><span class="m-btn ghost" style="font-size:3cqw;padding:2cqw 3cqw;color:#fff;box-shadow:inset 0 0 0 .4cqw #fff">Itinéraire</span></div>
+          <div style="font-size:3cqw;color:#cfd3d1">L'Arjal, 48100 Antrenas · Lundi au vendredi, 8:00 – 18:30</div>
+        </div></div></figure>
+      <div class="why"><h3>Pourquoi cette piste</h3><ul>
+        <li>C'est le changement le plus faible pour les clients habitués : la marque, le menu et le pied de page restent à leur place.</li>
+        <li>Le texte, aujourd'hui caché derrière les animations, devient lisible dès l'arrivée sur la page.</li>
+        <li>Les pages de prestations sont étoffées avec les textes que l'accueil contient déjà.</li>
+        <li>Sur mobile, une barre Appeler, E-mail et Plan est empruntée à la proposition 3.</li>
+        <li>Limite : la piste est peu spectaculaire, et les photos jouent un rôle secondaire.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- D2 · Proposition 2 -->
+<section class="slide" id="proposition-2" data-title="Proposition 2 · Le métier en images">
+  <div class="slide-head"><span class="letter">D · PROPOSITION 2 / 3</span><h2>Le métier en images</h2>
+    <p>Ici, les photos de réalisations mènent le récit. L'accueil s'ouvre sur une grande image de chantier, avec le titre posé dessus, puis sur une mosaïque par savoir-faire. Le texte passe au second plan, en légendes et en sections plus courtes, et le vert ne sert plus qu'aux marques d'accent.</p></div>
+  <div class="prop">
+    <figure class="fig"><figcaption>Accueil · ordinateur</figcaption>
+      <div class="frame"><div class="frame-bar"><i></i><i></i><i></i><span>Accueil — Le métier en images</span></div>
+      <div class="mock" style="background:#1d1f1e;color:#fff">
+        <div style="position:relative;aspect-ratio:16/8">
+          <img src="assets/img/p2866-54.jpg" alt="" style="position:absolute;inset:0;object-position:50% 60%">
+          <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,17,16,.88) 0 38%,rgba(15,17,16,.15))"></div>
+          <div style="position:absolute;left:4cqw;right:4cqw;top:2.4cqw;display:flex;align-items:center;gap:2cqw">
+            <span style="background:#fff;border-radius:.6cqw;padding:.6cqw 1cqw;display:inline-flex"><img src="assets/img/logo.png" alt="" style="width:17cqw;height:auto"></span>
+            <nav style="margin-left:auto;display:flex;gap:2cqw;font:700 1.35cqw/1 var(--f-cond);text-transform:uppercase;letter-spacing:.05em"><span>Réalisations</span><span>Savoir-faire</span><span>L'atelier</span><span>Contact</span></nav></div>
+          <div style="position:absolute;left:4cqw;bottom:5cqw;width:42cqw;display:grid;gap:1.8cqw">
+            <span class="cap">Ferronnerie thermolaquée</span>
+            <div class="m-h1" style="color:#fff">Inox, alu et acier, façonnés en Lozère</div>
+            <div style="display:flex;gap:1.4cqw"><span class="m-btn">Voir les réalisations</span><span class="m-btn ghost" style="color:#fff;box-shadow:inset 0 0 0 .2cqw #fff">06 79 93 57 93</span></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:14cqw 14cqw;gap:.8cqw;padding:.8cqw">
+          <div style="grid-row:span 2;position:relative"><img src="assets/img/p2781-47.jpg" alt=""><span class="cap" style="position:absolute;left:1.6cqw;bottom:1.6cqw;background:#1d1f1e;padding:.8cqw">Chaudronnerie inox</span></div>
+          <div style="position:relative"><img src="assets/img/p2866-41.jpg" alt=""></div>
+          <div style="position:relative"><img src="assets/img/p2939-14.jpg" alt=""></div>
+          <div style="position:relative"><img src="assets/img/p2781-2.jpg" alt=""></div>
+          <div style="position:relative"><img src="assets/img/p2965-5.jpg" alt=""></div>
+        </div>
+      </div></div></figure>
+    <figure class="fig"><figcaption>Mobile · 390 px</figcaption>
+      <div class="phone"><div class="mock" style="background:#1d1f1e;color:#fff">
+        <div style="position:relative;height:300px"><img src="assets/img/p2866-54.jpg" alt="" style="position:absolute;inset:0">
+          <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(15,17,16,.92) 15%,rgba(15,17,16,0) 70%)"></div>
+          <div style="position:absolute;left:4cqw;top:4cqw;right:4cqw;display:flex;align-items:center"><span style="background:#fff;border-radius:2cqw;padding:1.5cqw 2.5cqw;display:inline-flex"><img src="assets/img/logo.png" alt="" style="width:38cqw;height:auto"></span><span class="burger" style="filter:invert(1)"></span></div>
+          <div style="position:absolute;left:5cqw;right:5cqw;bottom:5cqw;display:grid;gap:3cqw"><span class="cap">Ferronnerie thermolaquée</span><div class="m-h1" style="color:#fff">Inox, alu et acier, façonnés en Lozère</div></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5cqw;padding:1.5cqw"><div style="aspect-ratio:1"><img src="assets/img/p2781-47.jpg" alt=""></div><div style="aspect-ratio:1"><img src="assets/img/p2939-14.jpg" alt=""></div><div style="aspect-ratio:1"><img src="assets/img/p2965-4.jpg" alt=""></div><div style="aspect-ratio:1"><img src="assets/img/p2781-2.jpg" alt=""></div></div>
+      </div></div></figure>
+    <div class="subgrid full">
+      <figure class="fig"><figcaption>Section prestations</figcaption>
+        <div class="frame"><div class="mock" style="background:#1d1f1e;color:#fff;display:grid">
+          <div style="display:grid;grid-template-columns:1fr 1fr;align-items:center">
+            <div style="aspect-ratio:3/4;overflow:hidden"><img src="assets/img/p2866-41.jpg" alt=""></div>
+            <div style="padding:5cqw;display:grid;gap:2.4cqw;align-content:center"><span class="cap">02 · Thermolaquage</span><h4 style="font-size:5cqw">Ferronnerie et chaudronnerie thermolaquées</h4><p style="font-size:3cqw;color:#c4c9c6;line-height:1.5">Peinture en poudre appliquée par effet électrostatique, puis cuite au four.</p><span style="font:700 3cqw/1 var(--f-cond);color:var(--m-green);text-transform:uppercase">59 photos →</span></div>
+          </div></div></div></figure>
+      <figure class="fig"><figcaption>Bloc contact</figcaption>
+        <div class="frame"><div class="mock" style="background:#1d1f1e;color:#fff;padding:5cqw;display:grid;grid-template-columns:1fr 1fr;gap:4cqw;align-items:center">
+          <div style="display:grid;gap:2cqw"><span class="cap">Un projet en inox, alu ou acier ?</span><div style="font:800 5.5cqw/1.1 var(--f-body)">Montrez-nous une photo, on en parle.</div><span class="m-btn" style="font-size:3cqw;padding:2cqw 3cqw;justify-self:start">06 79 93 57 93</span></div>
+          <div class="m-br" style="aspect-ratio:1"><img src="assets/img/p2965-1.jpg" alt=""></div>
+        </div></div></figure>
+      <div class="why"><h3>Pourquoi cette piste</h3><ul>
+        <li>Les 165 photos de réalisations sont le premier atout du site, et cette piste les met en avant.</li>
+        <li>Le visiteur juge la qualité des finitions en un coup d'œil.</li>
+        <li>Limite : tout repose sur l'accord de l'entreprise et des propriétaires pour diffuser les photos, et sur des images récentes et nettes.</li>
+        <li>Limite : le fond sombre s'éloigne des fonds clairs actuels, et la piste est plus lourde à maintenir.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- D3 · Proposition 3 -->
+<section class="slide" id="proposition-3" data-title="Proposition 3 · Le contact avant tout">
+  <div class="slide-head"><span class="letter">D · PROPOSITION 3 / 3</span><h2>Le contact avant tout</h2>
+    <p>Pensée pour le visiteur pressé, souvent sur un téléphone. Le numéro et les horaires forment le premier écran, et les prestations deviennent une liste courte de besoins. Le parcours tient en trois étapes : décrire son projet, appeler, puis recevoir un devis gratuit.</p></div>
+  <div class="prop">
+    <figure class="fig"><figcaption>Accueil · ordinateur</figcaption>
+      <div class="frame"><div class="frame-bar"><i></i><i></i><i></i><span>Accueil — Le contact avant tout</span></div>
+      <div class="mock">
+        <div class="m-head" style="background:var(--m-char)"><span style="background:#fff;border-radius:.6cqw;padding:.5cqw .9cqw;display:inline-flex"><img src="assets/img/logo.png" alt="" style="width:17cqw;height:auto"></span><nav style="color:#fff"><span>Prestations</span><span>Réalisations</span><span>Contact</span></nav><span class="m-btn">Appeler</span></div>
+        <div style="display:grid;grid-template-columns:1.2fr .8fr">
+          <div style="padding:5cqw 4cqw;display:grid;gap:2cqw;align-content:center">
+            <span class="cap">Chaudronnerie · Ferronnerie · Métallerie</span>
+            <div class="m-h1" style="font-size:3cqw">Votre projet en inox, alu ou acier, près de Marvejols et Mende</div>
+            <div style="font:800 6.5cqw/1 var(--f-body);color:var(--m-fg)">06 79 93 57 93</div>
+            <p class="m-p">Lundi au vendredi · 8 h 00 – 18 h 30 · lionnel.balez@gmail.com</p>
+            <div style="display:flex;gap:1.4cqw"><span class="m-btn">Appeler</span><span class="m-btn ghost">Écrire un e-mail</span><span class="m-btn ghost">Itinéraire</span></div></div>
+          <div style="background:var(--m-green);padding:4cqw;display:grid;gap:2cqw;align-content:center;color:#06170d">
+            <span style="font:700 1.5cqw/1 var(--f-cond);text-transform:uppercase;letter-spacing:.1em">Comment ça se passe</span>
+            <div style="display:grid;gap:1.6cqw;font-size:1.7cqw;font-weight:600"><span>1 · Vous décrivez votre besoin</span><span>2 · Conseils personnalisés</span><span>3 · Devis gratuit</span><span>4 · Fabrication et livraison sur site</span></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--m-line)">
+          <div style="padding:2.4cqw;border-right:1px solid var(--m-line)"><h4>Chaudronnerie</h4><p class="m-p">Alu, inox</p></div><div style="padding:2.4cqw;border-right:1px solid var(--m-line)"><h4>Thermolaquage</h4><p class="m-p">Peinture en poudre</p></div><div style="padding:2.4cqw;border-right:1px solid var(--m-line)"><h4>Ferronnerie inox</h4><p class="m-p">Inox, alu, acier</p></div><div style="padding:2.4cqw"><h4>Mobilier</h4><p class="m-p">Acier, inox</p></div></div>
+      </div></div></figure>
+    <figure class="fig"><figcaption>Mobile · 390 px</figcaption>
+      <div class="phone"><div class="mock">
+        <div class="m-head" style="background:var(--m-char)"><span style="background:#fff;border-radius:2cqw;padding:1.5cqw 2.5cqw;display:inline-flex"><img src="assets/img/logo.png" alt="" style="width:38cqw;height:auto"></span><span class="burger" style="filter:invert(1)"></span></div>
+        <div style="padding:6cqw 5cqw;display:grid;gap:4cqw">
+          <span class="cap">Près de Marvejols et Mende</span>
+          <div class="m-h1" style="font-size:7cqw">Votre projet en inox, alu ou acier</div>
+          <div style="background:var(--m-green);border-radius:3cqw;padding:5cqw;display:grid;gap:2cqw;color:#06170d"><span style="font:700 3.6cqw/1 var(--f-cond);text-transform:uppercase">Appeler</span><span style="font:800 8.5cqw/1 var(--f-body)">06 79 93 57 93</span><span style="font-size:3.8cqw">Lun.–ven. 8 h – 18 h 30</span></div>
+          <div style="border:1px solid var(--m-line);border-radius:3cqw;padding:4cqw;font-size:4cqw">✉ lionnel.balez@gmail.com</div>
+          <div style="border:1px solid var(--m-line);border-radius:3cqw;padding:4cqw;font-size:4cqw">⌖ L'Arjal, 48100 Antrenas</div></div>
+        <div class="callbar"><span>Appeler</span><span>E-mail</span><span>Plan</span></div>
+      </div></div></figure>
+    <div class="subgrid full">
+      <figure class="fig"><figcaption>Section prestations</figcaption>
+        <div class="frame"><div class="mock" style="padding:5cqw;display:grid;gap:2.4cqw">
+          <span class="cap">Vous avez besoin de…</span>
+          <div style="display:grid;gap:1.6cqw;font-size:3.4cqw">
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--m-line);padding-bottom:1.6cqw"><span>Une pièce en inox, alu ou acier</span><b style="color:var(--m-green)">→</b></div>
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--m-line);padding-bottom:1.6cqw"><span>Une ferronnerie thermolaquée</span><b style="color:var(--m-green)">→</b></div>
+            <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--m-line);padding-bottom:1.6cqw"><span>Une pièce de chaudronnerie alu ou inox</span><b style="color:var(--m-green)">→</b></div>
+            <div style="display:flex;justify-content:space-between"><span>Un meuble en acier ou en inox</span><b style="color:var(--m-green)">→</b></div></div></div></div></figure>
+      <figure class="fig"><figcaption>Bloc contact</figcaption>
+        <div class="frame"><div class="mock" style="padding:5cqw;display:grid;grid-template-columns:1fr 1fr;gap:3cqw">
+          <div style="background:var(--m-green);border-radius:2cqw;padding:4cqw;color:#06170d"><b style="font:700 3cqw/1 var(--f-cond);text-transform:uppercase">Téléphone</b><div style="font:800 5cqw/1.1 var(--f-body);margin-top:1.6cqw">06 79 93 57 93</div></div>
+          <div style="background:var(--m-soft);border-radius:2cqw;padding:4cqw"><b style="font:700 3cqw/1 var(--f-cond);text-transform:uppercase">E-mail</b><div style="font-size:3cqw;margin-top:1.6cqw;word-break:break-all">lionnel.balez@gmail.com</div></div>
+          <div style="background:var(--m-soft);border-radius:2cqw;padding:4cqw"><b style="font:700 3cqw/1 var(--f-cond);text-transform:uppercase">Atelier</b><div style="font-size:3cqw;margin-top:1.6cqw">L'Arjal, 48100 Antrenas</div></div>
+          <div style="background:var(--m-soft);border-radius:2cqw;padding:4cqw"><b style="font:700 3cqw/1 var(--f-cond);text-transform:uppercase">Horaires</b><div style="font-size:3cqw;margin-top:1.6cqw">Lun.–ven. 8:00 – 18:30</div></div>
+        </div></div></figure>
+      <div class="why"><h3>Pourquoi cette piste</h3><ul>
+        <li>Le téléphone est le premier moyen de contact mis en avant par le site actuel, et c'est là que cette piste concentre l'effort.</li>
+        <li>Les étapes « conseils, devis gratuit, livraison sur site » viennent du texte d'accueil existant.</li>
+        <li>Limite : les photos et le savoir-faire passent au second plan, et le site peut paraître moins artisanal.</li>
+        <li>Limite : la piste suppose que l'atelier puisse répondre au téléphone sur les horaires affichés.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- E · Comparatif -->
+<section class="slide" id="comparatif" data-title="Comparatif des trois pistes">
+  <div class="slide-head"><span class="letter">E · COMPARATIF</span><h2>Comparatif des trois pistes</h2>
+    <p>Ce sont des appréciations qualitatives et argumentées, pas des mesures : nous ne donnons aucun taux de conversion ni aucune promesse de résultat. Les points vont de ●○○ (faible) à ●●● (fort).</p></div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Critère</th><th>1 · L'évolution fidèle</th><th>2 · Le métier en images</th><th>3 · Le contact avant tout</th></tr></thead>
+    <tbody>
+      <tr><td>Continuité avec la marque actuelle</td><td><span class="dots">●●●</span> mêmes repères, fonds clairs</td><td><span class="dots">●●<s>●</s></span> fond sombre nouveau</td><td><span class="dots">●●<s>●</s></span> hiérarchie très différente</td></tr>
+      <tr><td>Mise en valeur des réalisations</td><td><span class="dots">●●<s>●</s></span> cartes + galerie</td><td><span class="dots">●●●</span> photos au premier plan</td><td><span class="dots">●<s>●●</s></span> secondaire</td></tr>
+      <tr><td>Accès au téléphone sur mobile</td><td><span class="dots">●●●</span> barre d'appel fixe</td><td><span class="dots">●●<s>●</s></span> bouton dans l'en-tête</td><td><span class="dots">●●●</span> premier écran</td></tr>
+      <tr><td>Place du texte existant (thermolaquage, procédés, références)</td><td><span class="dots">●●●</span> intégral</td><td><span class="dots">●<s>●●</s></span> raccourci en légendes</td><td><span class="dots">●●<s>●</s></span> regroupé par besoin</td></tr>
+      <tr><td>Dépendance aux autorisations photo</td><td>Moyenne : la démo fonctionne aussi avec peu de photos</td><td>Forte : sans photos validées, pas de site</td><td>Faible</td></tr>
+      <tr><td>Effort de mise à jour</td><td>Faible</td><td>Élevé : sélection et légendes régulières</td><td>Faible</td></tr>
+    </tbody></table></div>
+  <div class="why" style="margin-top:22px"><h3>Recommandation : piste 1, avec la barre d'appel de la piste 3</h3>
+    <p style="color:var(--muted);max-width:70ch">La piste 1 corrige les problèmes observés (lisibilité, mobile, pages de prestations trop minces) sans demander aux clients habitués de réapprendre le site. Elle reste aussi utilisable tant que toutes les photos ne sont pas validées. La barre « Appeler · E-mail · Plan » de la piste 3 garde le téléphone à portée de pouce sur mobile. C'est un choix argumenté, pas une garantie de résultat.</p></div>
+</section>
+
+<!-- F · Démonstration -->
+<section class="slide" id="demonstration" data-title="Démonstration du nouveau site">
+  <div class="slide-head"><span class="letter">F · DÉMONSTRATION</span><h2>Démonstration du nouveau site</h2>
+    <p>La piste 1 est construite en entier et se navigue page par page : accueil, l'entreprise, quatre pages de prestations détaillées, réalisations, zone d'intervention, contact et mentions légales. La démo n'est pas indexée et ne contient aucun formulaire.</p></div>
+  <div class="grid g2" style="align-items:center">
+    <figure class="fig"><div class="brackets" style="margin:10px"><a href="demo.html" style="display:block"><img src="assets/img/p2939-21.jpg" alt="Ouvrir la démonstration" width="1400" height="1050" style="display:block;width:100%;height:auto;border-radius:4px"></a></div>
+      <figcaption>Photo du site actuel (page Ferronnerie inox) · autorisation à obtenir</figcaption></figure>
+    <div class="grid" style="gap:16px">
+      <a class="btn btn-green" href="demo.html" style="justify-self:start;font-size:1rem;padding:1em 1.3em">Ouvrir la démonstration
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <div class="card"><h3>Pages accessibles directement</h3>
+        <ul style="columns:2;column-gap:24px;display:block">
+          <li><a href="demo.html#accueil">Accueil</a></li><li><a href="demo.html#entreprise">L'entreprise</a></li>
+          <li><a href="demo.html#chaudronnerie">Chaudronnerie</a></li><li><a href="demo.html#thermolaquage">Thermolaquage</a></li>
+          <li><a href="demo.html#inox">Ferronnerie inox</a></li><li><a href="demo.html#mobilier">Mobilier</a></li>
+          <li><a href="demo.html#realisations">Réalisations</a></li><li><a href="demo.html#zone">Zone d'intervention</a></li>
+          <li><a href="demo.html#contact">Contact</a></li><li><a href="demo.html#mentions">Mentions légales</a></li></ul></div>
+      <div class="card"><h3>Contact dans la démo</h3><p>Le téléphone et l'e-mail sont affichés en clair, avec un bouton « Copier ». Les liens d'appel et d'e-mail sont en place, mais ils peuvent ne rien déclencher dans cet aperçu. L'itinéraire et Facebook s'ouvrent dans un nouvel onglet. Il n'y a ni formulaire ni message « envoyé ».</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- G · À confirmer -->
+<section class="slide" id="a-confirmer" data-title="Informations à confirmer">
+  <div class="slide-head"><span class="letter">G · À CONFIRMER AVEC L'ENTREPRISE</span><h2>Informations à confirmer</h2>
+    <p>Rien de ce qui suit n'a été tranché à la place de l'entreprise. Dans la démo, chaque point concerné porte la mention « à confirmer ».</p></div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Sujet</th><th>Ce que dit le site actuel</th><th>Question</th></tr></thead>
+    <tbody>
+      <tr><td>Autorisation photos</td><td>165 photos dans les diaporamas, dont des maisons identifiables, une plaque d'immatriculation (chaudronnerie, photo 15) et un logo SDEE (photo 29)</td><td>Quelles photos peut-on publier ? Les clients ont-ils donné leur accord ?</td></tr>
+      <tr><td>Références clients</td><td>SDEE (Mende, Marvejols), Clos du Nid, maison de retraite Saint-Martin (La Canourgue), résidence Rey (Marvejols), lycée et collège Notre-Dame (Marvejols)</td><td>Ces références sont-elles toujours d'actualité, et peut-on les citer ?</td></tr>
+      <tr><td>Ancienneté et volume</td><td>« plus de 20 ans d'expérience », « plus de 200 réalisations chez les particuliers » (texte daté au moins de 2017)</td><td>Quels chiffres sont à jour ?</td></tr>
+      <tr><td>Agréments</td><td>« l'agrément de soudure en baguette et au TIG »</td><td>Quel organisme, quel intitulé exact, est-il toujours valide ?</td></tr>
+      <tr><td>Label « Artisan »</td><td>Image « Artisan » dans le diaporama d'accueil</td><td>L'entreprise est-elle immatriculée comme artisan et peut-elle utiliser ce logo ?</td></tr>
+      <tr><td>Mobilier</td><td>« acier et inox » sur l'accueil, « alu et inox » dans le titre de la page Mobilier</td><td>Quels matériaux faut-il citer ?</td></tr>
+      <tr><td>Effectif</td><td>« nos équipes », « notre équipe »</td><td>Combien de personnes travaillent à l'atelier ?</td></tr>
+      <tr><td>Thermolaquage</td><td>« Notre entreprise maîtrisant la technique de thermolaquage »</td><td>Le thermolaquage est-il réalisé en interne ou chez un partenaire ?</td></tr>
+      <tr><td>Zone d'intervention</td><td>Une rubrique « Zone d'intervention » sans liste ; Marvejols, Mende, La Canourgue et la Lozère sont cités ailleurs</td><td>Quelles communes et quel rayon faut-il indiquer ?</td></tr>
+      <tr><td>Livraison gratuite</td><td>« Livraison gratuite de pièces sur site »</td><td>Y a-t-il des conditions de distance ?</td></tr>
+      <tr><td>Mentions légales</td><td>« Siren : 798 322 863 00019 », capital 10 000 €, aucun hébergeur indiqué</td><td>Quels sont la forme juridique, le SIREN (798 322 863), le RCS ou RM et l'hébergeur ?</td></tr>
+      <tr><td>Photo de soudure d'accueil</td><td>lionnelbalez.jpg (étincelles)</td><td>Est-ce une photo de l'atelier ou une image d'illustration ? Elle n'est pas utilisée dans la démo.</td></tr>
+      <tr><td>Statistiques</td><td>La page /statistiques-clients/ est protégée par mot de passe</td><td>Cette page doit-elle être conservée ?</td></tr>
+      <tr><td>Liens vers le site</td><td>Les mentions exigent une autorisation préalable pour faire un lien vers le site</td><td>La démo cite le site d'origine comme source : est-ce acceptable ?</td></tr>
+    </tbody></table></div>
+</section>
+
+<!-- H · Sources et images -->
+<section class="slide" id="sources" data-title="Sources et registre des images">
+  <div class="slide-head"><span class="letter">H · SOURCES</span><h2>Sources et registre des images</h2>
+    <p>Pages consultées le 25/10/2026 : accueil, /chaudronnerie-marvejols/, /ferronnerie-chaudronnerie-thermolaquee-marvejols/, /ferronnerie-inox-marvejols/, /mobilier-ferronnerie-marvejols/, /contact/, /mentions-legales/, /politiques-de-confidentialites/, /politique-de-cookies-ue/, /plan-du-site/, sitemap.xml et robots.txt. La page /statistiques-clients/ n'était pas accessible (mot de passe). La présence d'une photo sur le site d'origine ne vaut pas autorisation : aucune photo n'est autorisée à ce jour.</p></div>
+  <div class="grid g3" style="margin-bottom:22px">
+    <div class="card"><h3>Utilisées</h3><p>Le logo d'origine (logo_balez_soudure_002.png) et 22 photos de chantier issues des diaporamas des pages de prestations, redimensionnées à 1400 px maximum.</p></div>
+    <div class="card"><h3>Écartées</h3><ul>
+      <li>lionnelbalez.jpg, une image d'étincelles qui est peut-être une illustration.</li>
+      <li>IMG_0536 (thermolaquée 59), où un numéro de maison est lisible.</li>
+      <li>20150107_143642828_iOS (thermolaquée 7), qui double l'escalier IMG_0222.</li>
+      <li>Les photos où l'on voit une plaque d'immatriculation ou un logo client.</li>
+      <li>Le logo de l'agence COM performances et le visuel « Artisan ».</li></ul></div>
+    <div class="card"><h3>Créés pour la proposition</h3><p>Les motifs vectoriels (cordon de soudure, étincelles, équerres, rayures) et les maquettes, en HTML et CSS. Il n'y a aucune photo d'illustration, aucun portrait, aucune signature et aucun avis.</p></div>
+  </div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Aperçu</th><th>Contenu</th><th>Page d'origine</th><th>URL d'origine</th><th>Statut</th></tr></thead>
+    <tbody>
+      <tr><td><img src="assets/img/logo.png" alt="" width="64" height="16" style="width:64px;height:auto;background:#fff"></td><td>Logo Lionnel Balez Soudure</td><td>Toutes</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/logo_balez_soudure_002.png</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2781-2.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Remorque en aluminium</td><td>Chaudronnerie</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/13235324_1551576748478951_3524099144359352395_o.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2781-13.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Camion-grue équipé de coffres en tôle alu larmée</td><td>Chaudronnerie</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/13507073_1566550950314864_1415813101727937425_n.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2781-23.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Aménagement de camion : tiroirs et coffres inox/alu</td><td>Chaudronnerie</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/13516678_1566551053648187_2415523416011231404_n.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2781-46.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Table inox sur roulettes</td><td>Chaudronnerie</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/IMG_0291.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2781-47.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Raccord en té inox à brides</td><td>Chaudronnerie</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/IMG_0351.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2781-62.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Équipement inox de cuisine professionnelle</td><td>Chaudronnerie</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/IMG_0439.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2781-65.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Plan de travail inox de cuisine professionnelle</td><td>Chaudronnerie</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/IMG_0442.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2781-70.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Margelle de piscine en inox</td><td>Chaudronnerie</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/IMG_0503.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2866-13.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Portail vert thermolaqué</td><td>Thermolaquée</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/IMG_0031-1.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2866-21.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Grille de défense de fenêtre, gris</td><td>Thermolaquée</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/IMG_0054.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2866-41.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Passerelle en caillebotis avec garde-corps</td><td>Thermolaquée</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/IMG_0191.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2866-49.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Escalier noir à marches en porte-à-faux</td><td>Thermolaquée</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/IMG_0222.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2866-54.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Garde-corps avec vue sur la vallée</td><td>Thermolaquée</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/IMG_0465.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2939-6.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Garde-corps inox à barreaux sur terrasse</td><td>Inox</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/IMG_0104.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2939-10.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Garde-corps inox sur muret de terrasse</td><td>Inox</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/IMG_0133.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2939-14.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Balcon en ferronnerie sur maison en pierre</td><td>Inox</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/IMG_0232.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2939-17.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Garde-corps inox sur terrasse bois</td><td>Inox</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/IMG_0594.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2939-21.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Garde-corps inox, maison contemporaine</td><td>Inox</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/image.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2965-1.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Jardinière en inox</td><td>Mobilier</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/11222344_1493205697649390_3545648808356909300_n.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2965-3.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Structures de chaises</td><td>Mobilier</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/12661864_1518648521771774_1011301348438852111_n.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2965-4.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Table basse en acier noir</td><td>Mobilier</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/16142680_1647372798899345_8836153586097242174_n.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+<tr><td><img src="assets/img/p2965-5.jpg" alt="" width="64" height="48" loading="lazy" style="width:64px;height:48px;object-fit:cover;border-radius:4px"></td><td>Range-bûches près d&#x27;un poêle</td><td>Mobilier</td><td><code>https://lionnelbalezsoudure.fr/wp-content/uploads/sites/459/2017/10/886994_1503163339986959_1328814959907547814_o.jpg</code></td><td><span class="tag tag-warn">Autorisation à obtenir</span></td></tr>
+    </tbody></table></div>
+</section>
+
+<!-- I · Tests et limites -->
+<section class="slide" id="tests" data-title="Tests effectués et limites">
+  <div class="slide-head"><span class="letter">I · VÉRIFICATIONS</span><h2>Tests effectués et limites</h2>
+    <p>Vérifications faites avec Chrome sans interface et par lecture du code, sur la présentation et sur la démo.</p></div>
+  <div class="grid g2">
+    <div class="card"><h3>Tests effectués</h3><ul id="testsDone">
+      <li>Captures dans Chrome headless (Chrome sur macOS) à 1440 px et à 390 px. Chrome headless ne descend pas sous 500 px de large : les pages ont donc été chargées dans un cadre de 390 px pour obtenir une vraie vue mobile.</li>
+      <li>Débordement horizontal (comparaison de scrollWidth et de clientWidth) : 0 sur les 11 diapositives de la présentation et sur les 10 pages de la démo à 390 px. Les tableaux défilent dans leur propre conteneur.</li>
+      <li>Une barre du haut qui débordait à 390 px (437 px de large) a été corrigée. Le menu de la démo tient sur une ligne à 1200 et 1440 px ; le menu burger prend le relais en dessous.</li>
+      <li>Démo : 0 erreur JavaScript, 0 image cassée, navigation par ancre (#accueil, #contact…) vérifiée page par page.</li>
+      <li>Liens vérifiés par recherche dans le code : tel:+33679935793 et mailto:lionnel.balez@gmail.com, aucun formulaire, balise noindex présente, règles prefers-reduced-motion présentes, mention « Proposition de refonte non officielle » visible.</li>
+      <li>Relecture des textes de la démo par rapport au contenu source : retrait des formulations de prestations que le site ne contient pas.</li>
+      <li>Site d'origine vu à 390 px : pas de texte coupé. Un constat initial erroné, causé par la largeur minimale de Chrome headless, a été corrigé.</li>
+
+    </ul></div>
+    <div class="card"><h3>Limites restantes</h3><ul>
+      <li>Les autorisations photo, les références et les chiffres attendent la validation de l'entreprise.</li>
+      <li>Dans l'aperçu, les liens d'appel et d'e-mail peuvent ne rien faire selon l'appareil ; le numéro et l'adresse restent copiables.</li>
+      <li>Le plan Google Maps intégré n'est pas reproduit, car l'aperçu bloque les cartes externes : un lien d'itinéraire le remplace.</li>
+      <li>Nous n'avons fait aucune mesure de vitesse, de référencement ou d'audience, ni sur le site actuel ni sur la démo.</li>
+      <li>Les tests ont été faits sur Chrome (moteur Blink), pas sur Safari iOS ni sur Firefox.</li>
+      <li>La politique de confidentialité et la page cookies définitives restent à rédiger avec l'entreprise.</li>
+      <li>Le site public n'a pas été modifié.</li></ul></div>
+  </div>
+  <p class="note" style="margin-top:24px">Proposition de refonte non officielle : rien n'est mis en ligne sans l'accord de l'entreprise.</p>
+</section>
+
+</main>
+
+<nav class="pager" aria-label="Navigation entre les diapositives">
+  <div class="pager-in">
+    <button class="btn" id="prev" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span id="prevLabel">Précédent</span></button>
+    <span class="kbd">← → pour naviguer · S pour le sommaire · F pour le plein écran</span>
+    <button class="btn btn-green" id="next" type="button"><span id="nextLabel">Suivant</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+  </div>
+</nav>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var n=slides.length, cur=0;
+  var $=function(id){return document.getElementById(id)};
+  var list=$('tocList'), toc=$('toc');
+  slides.forEach(function(s,i){
+    var li=document.createElement('li'), a=document.createElement('a');
+    a.href='#'+s.id; a.innerHTML='<b>'+String(i+1).padStart(2,'0')+'</b><span></span>';
+    a.lastChild.textContent=s.dataset.title;
+    a.addEventListener('click',function(e){e.preventDefault();go(i,true);closeToc();});
+    li.appendChild(a); list.appendChild(li);
+  });
+  $('progress').setAttribute('aria-valuemax',n);
+  function go(i,focus){
+    cur=Math.max(0,Math.min(n-1,i));
+    slides.forEach(function(s,j){s.hidden=j!==cur});
+    $('count').textContent=(cur+1)+' / '+n;
+    $('progress').firstElementChild.style.width=((cur+1)/n*100)+'%';
+    $('progress').setAttribute('aria-valuenow',cur+1);
+    $('prev').disabled=cur===0; $('next').disabled=cur===n-1;
+    $('prevLabel').textContent=cur>0?slides[cur-1].dataset.title:'Précédent';
+    $('nextLabel').textContent=cur<n-1?slides[cur+1].dataset.title:'Fin';
+    [].forEach.call(list.querySelectorAll('a'),function(a,j){a.setAttribute('aria-current',j===cur?'true':'false')});
+    try{history.replaceState(null,'','#'+slides[cur].id)}catch(e){}
+    window.scrollTo(0,0);
+    if(focus){var h=slides[cur].querySelector('h1,h2'); if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true})}}
+  }
+  function openToc(){try{toc.showModal()}catch(e){toc.setAttribute('open','')} var a=list.querySelector('[aria-current="true"]'); if(a)a.focus();}
+  function closeToc(){try{toc.close()}catch(e){toc.removeAttribute('open')} }
+  $('tocBtn').addEventListener('click',openToc);
+  $('tocClose').addEventListener('click',closeToc);
+  toc.addEventListener('click',function(e){if(e.target===toc)closeToc()});
+  $('prev').addEventListener('click',function(){go(cur-1,true)});
+  $('next').addEventListener('click',function(){go(cur+1,true)});
+  var fsBtn=$('fsBtn'), root=document.documentElement;
+  if(!(root.requestFullscreen||root.webkitRequestFullscreen)){fsBtn.hidden=true}
+  function toggleFs(){
+    try{
+      if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document)}
+      else{var p=(root.requestFullscreen||root.webkitRequestFullscreen).call(root); if(p&&p.catch)p.catch(function(){fsBtn.hidden=true})}
+    }catch(e){fsBtn.hidden=true}
+  }
+  fsBtn.addEventListener('click',toggleFs);
+  document.addEventListener('keydown',function(e){
+    if(e.altKey||e.ctrlKey||e.metaKey)return;
+    var t=e.target.tagName; if(t==='INPUT'||t==='TEXTAREA')return;
+    if(toc.open){return}
+    if(e.key==='ArrowRight'||e.key==='PageDown'){e.preventDefault();go(cur+1,true)}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1,true)}
+    else if(e.key==='Home'){e.preventDefault();go(0,true)}
+    else if(e.key==='End'){e.preventDefault();go(n-1,true)}
+    else if(e.key==='s'||e.key==='S'){e.preventDefault();openToc()}
+    else if(e.key==='f'||e.key==='F'){toggleFs()}
+  });
+  // balayage tactile horizontal
+  var sx=null,sy=0;
+  document.addEventListener('touchstart',function(e){if(e.touches.length===1){sx=e.touches[0].clientX;sy=e.touches[0].clientY}},{passive:true});
+  document.addEventListener('touchend',function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*2&&!e.target.closest('.tablewrap')){go(cur+(dx<0?1:-1),true)} sx=null},{passive:true});
+  var h=(location.hash||'').slice(1), start=0;
+  slides.forEach(function(s,i){if(s.id===h)start=i});
+  go(start,false);
+})();
+</script>

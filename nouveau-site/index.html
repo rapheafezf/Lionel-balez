@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Démo Lionnel Balez Soudure</title>
+<meta name="description" content="Démonstration non officielle d'une refonte du site Lionnel Balez Soudure — non indexée.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Raleway:wght@400;500;600;700;800&family=Roboto+Condensed:wght@400;700&display=swap">
+<style>
+/* Démo volontairement en thème clair unique, comme le site d'origine */
+:root{
+  color-scheme:light;
+  --bg:#ffffff; --soft:#f5f6f5; --soft-2:#eceeed; --fg:#232725; --muted:#59615c; --line:#e1e5e2;
+  --green:#00ce6b; --green-2:#40e696; --green-ink:#00753c; --on-green:#06170d;
+  --char:#303030; --char-2:#3b3d3c; --char-fg:#d3d7d5; --note:#b4471b; --warn-bg:#fff4e5; --warn-fg:#7a3b00;
+  --f-body:"Raleway",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-cond:"Roboto Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-hand:"Caveat","Bradley Hand","Comic Sans MS",cursive;
+  --wrap:1180px; --gut:max(16px,env(safe-area-inset-left,0px)); --gut-r:max(16px,env(safe-area-inset-right,0px));
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:90px}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 1rem/1.65 var(--f-body);-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom,0px)}
+img{max-width:100%;display:block;height:auto}
+h1,h2,h3,h4{line-height:1.15;text-wrap:balance;margin:0;font-weight:800}
+p{margin:0}
+a{color:var(--green-ink)}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px;border-radius:3px}
+.skip{position:absolute;left:-9999px}.skip:focus{left:16px;top:8px;z-index:200;background:#fff;padding:8px 12px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:var(--gut);padding-right:var(--gut-r)}
+.band{padding-block:clamp(48px,7vw,88px)}
+.band-soft{background:var(--soft)}
+.band-char{background:var(--char);color:#fff}
+.cap{font:700 .78rem/1.2 var(--f-cond);letter-spacing:.14em;text-transform:uppercase;color:var(--green-ink)}
+.band-char .cap{color:var(--green-2)}
+.lead{font-size:1.12rem;color:var(--muted);max-width:62ch}
+.prose{display:grid;gap:14px;max-width:68ch;color:var(--muted)}
+.prose strong{color:var(--fg)}
+.tbc{display:inline-block;vertical-align:.12em;font:700 .66rem/1 var(--f-cond);letter-spacing:.08em;text-transform:uppercase;background:var(--warn-bg);color:var(--warn-fg);border:1px solid currentColor;border-radius:3px;padding:.3em .45em;margin-left:.3em;white-space:nowrap}
+.note{font:600 1.3rem/1.1 var(--f-hand);color:var(--note)}
+.weld{display:block;width:min(220px,60%);height:14px;color:var(--green);margin-top:6px}
+.weld path{stroke-dasharray:600;stroke-dashoffset:600;animation:draw 1.4s .15s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.stripe{height:10px;background:repeating-linear-gradient(135deg,var(--green) 0 14px,var(--green-2) 14px 28px)}
+.br{position:relative}
+.br::before,.br::after{content:"";position:absolute;width:52px;height:52px;border:5px solid var(--green);pointer-events:none;z-index:1}
+.br::before{left:-12px;top:-12px;border-right:0;border-bottom:0}
+.br::after{right:-12px;bottom:-12px;border-left:0;border-top:0}
+.btn{display:inline-flex;align-items:center;gap:.55em;font:700 .92rem/1 var(--f-cond);letter-spacing:.07em;text-transform:uppercase;text-decoration:none;
+  padding:1em 1.25em;border-radius:6px;border:2px solid var(--fg);color:var(--fg);background:transparent;cursor:pointer;min-height:48px}
+.btn svg{width:1.15em;height:1.15em;flex:none}
+.btn-green{background:var(--green);border-color:var(--green);color:var(--on-green)}
+.btn-green:hover{background:var(--green-2);border-color:var(--green-2)}
+.btn:not(.btn-green):hover{border-color:var(--green-ink);color:var(--green-ink)}
+.band-char .btn:not(.btn-green){color:#fff;border-color:#fff}
+.band-char .btn:not(.btn-green):hover{color:var(--green-2);border-color:var(--green-2)}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+
+/* bandeau démo */
+.demo-flag{background:var(--warn-bg);color:var(--warn-fg);font:700 .78rem/1.3 var(--f-cond);letter-spacing:.06em;text-transform:uppercase}
+.demo-flag .wrap{display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:space-between;align-items:center;padding-block:7px}
+.demo-flag a{color:inherit}
+
+/* en-tête */
+.strip{background:var(--soft);font-size:.88rem;color:var(--muted)}
+.strip .wrap{display:flex;gap:8px 24px;flex-wrap:wrap;justify-content:space-between;align-items:center;padding-block:7px}
+.strip b{color:var(--fg)}
+.strip a{font:800 1.05rem/1 var(--f-body);color:var(--fg);text-decoration:none}
+header.site{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:#fff;border-bottom:1px solid var(--line)}
+header.site .wrap{display:flex;align-items:center;gap:20px;min-height:76px}
+.logo img{width:clamp(170px,22vw,240px)}
+nav.main{margin-left:auto}
+nav.main ul{list-style:none;margin:0;padding:0;display:flex;gap:0;flex-wrap:nowrap}
+nav.main a{display:block;padding:10px 8px;font:700 .8rem/1 var(--f-cond);letter-spacing:.04em;white-space:nowrap;text-transform:uppercase;color:var(--fg);text-decoration:none;border-bottom:3px solid transparent}
+nav.main a:hover{color:var(--green-ink)}
+nav.main a[aria-current="page"]{border-bottom-color:var(--green)}
+.burger{display:none;margin-left:auto;background:none;border:2px solid var(--fg);border-radius:6px;min-width:48px;min-height:44px;cursor:pointer;font:700 .8rem/1 var(--f-cond);text-transform:uppercase;letter-spacing:.06em;color:var(--fg);gap:8px;align-items:center;padding:0 12px}
+.burger i{display:block;width:18px;height:12px;background:linear-gradient(currentColor 0 0) 0 0/100% 2px no-repeat,linear-gradient(currentColor 0 0) 0 50%/100% 2px no-repeat,linear-gradient(currentColor 0 0) 0 100%/100% 2px no-repeat}
+@media (max-width:1180px){
+  .burger{display:inline-flex}
+  nav.main{position:absolute;left:0;right:0;top:100%;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 12px 24px rgba(0,0,0,.08);padding:8px var(--gut-r) 16px var(--gut)}
+  nav.main:not(.open){display:none}
+  nav.main ul{flex-direction:column}
+  nav.main a{padding:14px 4px;font-size:.95rem;border-bottom:1px solid var(--line)}
+  nav.main a[aria-current="page"]{color:var(--green-ink);border-bottom-color:var(--line);box-shadow:inset 4px 0 0 var(--green);padding-left:14px}
+}
+
+/* accueil */
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(28px,5vw,64px);align-items:center}
+.hero h1{font-size:clamp(2rem,4.4vw,3.3rem);letter-spacing:-.015em}
+.hero .txt{display:grid;gap:18px}
+.hero .photo{aspect-ratio:4/3;max-width:100%;margin:12px}
+.hero .photo img{width:100%;height:100%;object-fit:cover}
+.hours{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:.95rem}
+.hours svg{width:20px;height:20px;color:var(--green-ink);flex:none}
+.sparks{position:absolute;right:-6px;top:-30px;width:70px;height:70px;z-index:2;color:var(--green);pointer-events:none}
+.sparks line{stroke:currentColor;stroke-width:3;stroke-linecap:round;animation:spark 2.6s ease-in-out infinite}
+.sparks line:nth-child(2){animation-delay:.5s}.sparks line:nth-child(3){animation-delay:1s}.sparks line:nth-child(4){animation-delay:1.4s}
+@keyframes spark{0%,100%{opacity:.2}50%{opacity:1}}
+@media (max-width:860px){.hero .wrap{grid-template-columns:minmax(0,1fr)}}
+.promises{background:var(--soft)}
+.promises ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line)}
+.promises li{background:var(--soft);padding:18px 14px;display:flex;gap:10px;align-items:center;font:700 .86rem/1.25 var(--f-cond);letter-spacing:.05em;text-transform:uppercase}
+.promises svg{width:22px;height:22px;color:var(--green-ink);flex:none}
+@media (max-width:900px){.promises ul{grid-template-columns:repeat(2,1fr)}.promises li:last-child{grid-column:1/-1}}
+.sec-head{display:grid;gap:10px;margin-bottom:32px}
+.sec-head h2{font-size:clamp(1.6rem,3vw,2.3rem)}
+.cards{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr))}
+.card{display:grid;grid-template-rows:auto 1fr;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;text-decoration:none;color:var(--fg);transition:transform .2s ease,box-shadow .2s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,.09)}
+.card .ph{aspect-ratio:4/3;overflow:hidden;background:var(--soft-2)}
+.card .ph img{width:100%;height:100%;object-fit:cover}
+.card .bd{padding:18px;display:grid;gap:8px;align-content:start}
+.card h3{font-size:1.15rem}
+.card p{color:var(--muted);font-size:.95rem}
+.card .more{font:700 .8rem/1 var(--f-cond);letter-spacing:.08em;text-transform:uppercase;color:var(--green-ink);margin-top:4px}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:center}
+.split.rev > :first-child{order:2}
+@media (max-width:860px){.split{grid-template-columns:minmax(0,1fr)}.split.rev > :first-child{order:0}}
+.split .photo{aspect-ratio:4/3;margin:12px;max-width:100%}
+.split .photo.tall{aspect-ratio:3/4;max-width:420px}
+.split .photo img{width:100%;height:100%;object-fit:cover}
+.refs{list-style:none;margin:0;padding:0;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.refs li{background:#fff;border-left:4px solid var(--green);padding:14px 16px;font-weight:600}
+.refs li small{display:block;font-weight:400;color:var(--muted)}
+.cta .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px 40px;align-items:center}
+@media (max-width:760px){.cta .wrap{grid-template-columns:minmax(0,1fr)}}
+.cta h2{font-size:clamp(1.5rem,3vw,2.2rem)}
+.bigtel{font:800 clamp(1.8rem,4.5vw,2.8rem)/1 var(--f-body);color:#fff;text-decoration:none;letter-spacing:.01em}
+
+/* pages intérieures */
+.pagehead{background:var(--soft);padding-block:clamp(36px,5vw,60px)}
+.pagehead .wrap{display:grid;gap:12px}
+.crumbs{font:400 .85rem/1.3 var(--f-cond);color:var(--muted)}
+.crumbs a{color:var(--muted)}
+.pagehead h1{font-size:clamp(1.8rem,3.8vw,2.8rem);max-width:28ch}
+.gallery{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr))}
+.gallery figure{margin:0;display:grid;gap:6px}
+.gallery button{all:unset;cursor:zoom-in;display:block;aspect-ratio:4/3;overflow:hidden;border-radius:6px;background:var(--soft-2)}
+.gallery button:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.gallery button img{width:100%;height:100%;object-fit:cover;transition:transform .3s ease}
+.gallery button:hover img{transform:scale(1.04)}
+.gallery figcaption{font-size:.85rem;color:var(--muted);line-height:1.35}
+.gallery figcaption span{display:block;font:400 .74rem/1.3 var(--f-cond);color:var(--warn-fg)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.filters button{font:700 .8rem/1 var(--f-cond);letter-spacing:.07em;text-transform:uppercase;padding:.85em 1.1em;border-radius:999px;border:2px solid var(--line);background:#fff;color:var(--fg);cursor:pointer;min-height:44px}
+.filters button[aria-pressed="true"]{background:var(--char);border-color:var(--char);color:#fff}
+.related{display:flex;flex-wrap:wrap;gap:10px}
+.related a{font:700 .82rem/1 var(--f-cond);letter-spacing:.06em;text-transform:uppercase;padding:.9em 1.1em;border:2px solid var(--line);border-radius:6px;text-decoration:none;color:var(--fg)}
+.related a:hover{border-color:var(--green)}
+.facts{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+.fact{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px;display:grid;gap:6px}
+.fact h3{font-size:1rem}
+.fact p{color:var(--muted);font-size:.95rem}
+
+/* contact */
+.contact-grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.cbox{border:1px solid var(--line);border-radius:10px;padding:22px;display:grid;gap:12px;align-content:start;background:#fff}
+.cbox.main{background:var(--char);color:#fff;border-color:var(--char)}
+.cbox h2,.cbox h3{font-size:.85rem;font-family:var(--f-cond);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-ink)}
+.cbox.main h2{color:var(--green-2)}
+.cval{font:800 1.6rem/1.15 var(--f-body);word-break:break-word;user-select:all}
+.cbox.main .cval{font-size:clamp(1.8rem,5vw,2.4rem)}
+.cval.sm{font-size:1.15rem}
+.copy{justify-self:start;font:700 .78rem/1 var(--f-cond);letter-spacing:.07em;text-transform:uppercase;padding:.75em 1em;border-radius:6px;border:2px solid currentColor;background:transparent;color:inherit;cursor:pointer;min-height:40px}
+.status{font-size:.85rem;min-height:1.3em;color:var(--muted)}
+.cbox.main .status{color:var(--char-fg)}
+.hint{font-size:.85rem;color:var(--muted)}
+.cbox.main .hint{color:var(--char-fg)}
+
+/* zone */
+.mapwrap{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;overflow:hidden}
+.mapwrap svg{display:block;width:100%;height:auto}
+.mapwrap text{font-family:var(--f-cond);font-size:13px;fill:var(--fg)}
+
+/* mentions */
+.legal{display:grid;gap:30px;max-width:76ch}
+.legal section{display:grid;gap:10px}
+.legal h2{font-size:1.25rem}
+.legal p,.legal li{color:var(--muted)}
+.legal dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:0}
+.legal dt{font-weight:700;color:var(--fg)}
+.legal dd{margin:0;color:var(--muted);min-width:0;word-break:break-word}
+@media (max-width:520px){.legal dl{grid-template-columns:1fr}.legal dd{margin-bottom:8px}}
+
+/* pied */
+footer.site{background:var(--char);color:var(--char-fg);padding-block:48px 28px}
+footer .cols{display:grid;gap:28px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+footer h2{font:700 .85rem/1.2 var(--f-cond);letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:10px}
+footer a{color:#fff}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+footer .compare{margin-top:32px;padding:20px;border:1px solid #4a4c4b;border-radius:8px;display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:space-between}
+footer .compare p{margin:0;max-width:60ch;min-width:0}
+footer .compare a.btn{color:var(--on-green)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+footer .legalline{border-top:1px solid #4a4c4b;margin-top:32px;padding-top:18px;font-size:.85rem;display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
+
+/* barre d'appel mobile */
+.callbar{display:none}
+@media (max-width:760px){
+  .callbar{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--char);
+    padding:8px var(--gut-r) calc(8px + env(safe-area-inset-bottom,0px)) var(--gut)}
+  .callbar a{display:flex;justify-content:center;align-items:center;gap:6px;min-height:48px;border-radius:6px;background:var(--char-2);color:#fff;text-decoration:none;font:700 .85rem/1 var(--f-cond);letter-spacing:.06em;text-transform:uppercase}
+  .callbar a:first-child{background:var(--green);color:var(--on-green)}
+  .callbar svg{width:18px;height:18px}
+  body{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+}
+
+/* visionneuse */
+dialog.lb{border:0;padding:0;background:transparent;max-width:min(1100px,96vw);width:96vw}
+dialog.lb::backdrop{background:rgba(12,14,13,.88)}
+.lb-in{display:grid;gap:10px;color:#fff}
+.lb-in img{max-height:78vh;width:auto;max-width:100%;margin:0 auto;border-radius:4px}
+.lb-bar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.lb-bar p{font-size:.92rem;min-width:0;flex:1 1 240px}
+.lb-bar small{display:block;color:#ffd59e;font-family:var(--f-cond)}
+.lb-bar .btn{color:#fff;border-color:#fff;min-height:44px;padding:.7em 1em}
+
+.page{animation:pageIn .35s ease both}
+@keyframes pageIn{from{transform:translateY(8px)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .weld path{stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-tel" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></g></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></g></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-weld" viewBox="0 0 220 14"><path d="M2 7 q6 -6 12 0 t12 0 t12 0 t12 0 t12 0 t12 0 t12 0 t12 0 t12 0 t12 0 t12 0 t12 0 t12 0 t12 0 t12 0 t12 0 t12 0 t12 0" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></symbol>
+</svg>
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<div class="demo-flag" role="note"><div class="wrap">
+  <span>Proposition de refonte non officielle · démonstration non indexée</span>
+  <a href="http://127.0.0.1:8765/#demonstration">← Retour à la présentation</a>
+</div></div>
+
+<div class="strip"><div class="wrap">
+  <span>L'Arjal <b>48100 Antrenas</b> · Lundi au vendredi, 8 h 00 – 18 h 30</span>
+  <a href="tel:+33679935793">06 79 93 57 93</a>
+</div></div>
+
+<header class="site"><div class="wrap">
+  <a class="logo" href="#accueil" aria-label="Lionnel Balez Soudure, accueil"><img src="assets/img/logo.png" alt="Lionnel Balez Soudure" width="392" height="100"></a>
+  <button class="burger" type="button" aria-expanded="false" aria-controls="menu"><i aria-hidden="true"></i>Menu</button>
+  <nav class="main" id="menu" aria-label="Navigation principale"><ul>
+    <li><a href="#accueil">Accueil</a></li>
+    <li><a href="#entreprise">L'entreprise</a></li>
+    <li><a href="#chaudronnerie">Chaudronnerie</a></li>
+    <li><a href="#thermolaquage">Thermolaquage</a></li>
+    <li><a href="#inox">Ferronnerie inox</a></li>
+    <li><a href="#mobilier">Mobilier</a></li>
+    <li><a href="#realisations">Réalisations</a></li>
+    <li><a href="#zone">Zone</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul></nav>
+</div></header>
+
+<main id="contenu" tabindex="-1">
+
+<!-- ========== ACCUEIL ========== -->
+<div class="page" data-page="accueil" data-title="Chaudronnerie, ferronnerie, métallerie à Antrenas">
+  <section class="band hero"><div class="wrap">
+    <div class="txt">
+      <span class="cap">Antrenas · près de Marvejols et Mende · Lozère</span>
+      <h1>Un chaudronnier, ferronnier, métallier à votre service en Lozère</h1>
+      <svg class="weld" viewBox="0 0 220 14" preserveAspectRatio="none" aria-hidden="true"><use href="#i-weld"/></svg>
+      <p class="lead">Lionnel Balez Soudure, implanté à Antrenas, près de Marvejols et Mende, vous offre son savoir-faire en chaudronnerie, ferronnerie et métallerie.</p>
+      <div class="btns">
+        <a class="btn btn-green" href="tel:+33679935793"><svg aria-hidden="true"><use href="#i-tel"/></svg>06 79 93 57 93</a>
+        <a class="btn" href="#realisations">Voir les réalisations</a>
+      </div>
+      <p class="hours"><svg aria-hidden="true"><use href="#i-clock"/></svg>Du lundi au vendredi de 8 h 00 à 18 h 30</p>
+    </div>
+    <figure class="photo br" style="position:relative">
+      <svg class="sparks" viewBox="0 0 70 70" aria-hidden="true"><line x1="35" y1="40" x2="35" y2="8"/><line x1="38" y1="40" x2="62" y2="18"/><line x1="40" y1="44" x2="66" y2="44"/><line x1="32" y1="40" x2="12" y2="20"/></svg>
+      <img src="assets/img/p2939-21.jpg" alt="Garde-corps en inox sur une maison contemporaine" width="1400" height="1050">
+    </figure>
+  </div></section>
+
+  <section class="promises" aria-label="Nos engagements"><div class="wrap" style="padding-block:0">
+    <ul>
+      <li><svg aria-hidden="true"><use href="#i-check"/></svg>Devis gratuit</li>
+      <li><svg aria-hidden="true"><use href="#i-check"/></svg>Conseils personnalisés</li>
+      <li><svg aria-hidden="true"><use href="#i-check"/></svg>Travail soigné</li>
+      <li><svg aria-hidden="true"><use href="#i-check"/></svg>Respect des délais</li>
+      <li><svg aria-hidden="true"><use href="#i-check"/></svg>Livraison gratuite de pièces sur site<span class="tbc">à confirmer</span></li>
+    </ul>
+  </div></section>
+  <div class="stripe" aria-hidden="true"></div>
+
+  <section class="band"><div class="wrap">
+    <div class="sec-head"><span class="cap">Nos savoir-faire</span><h2>Chaudronnerie, ferronnerie et métallerie en inox, alu et acier</h2></div>
+    <div class="cards">
+      <a class="card" href="#chaudronnerie"><div class="ph"><img src="assets/img/p2781-62.jpg" alt="" width="1400" height="1050" loading="lazy"></div>
+        <div class="bd"><h3>Chaudronnerie</h3><p>Chaudronnerie aluminium et chaudronnerie inox, pour les particuliers et les professionnels.</p><span class="more">Découvrir →</span></div></a>
+      <a class="card" href="#thermolaquage"><div class="ph"><img src="assets/img/p2866-13.jpg" alt="" width="1400" height="1050" loading="lazy"></div>
+        <div class="bd"><h3>Ferronnerie – chaudronnerie thermolaquée</h3><p>Peinture en poudre appliquée par effet électrostatique, puis cuite au four : résistance aux chocs et à la corrosion, grand choix de teintes.</p><span class="more">Découvrir →</span></div></a>
+      <a class="card" href="#inox"><div class="ph"><img src="assets/img/p2939-6.jpg" alt="" width="1400" height="1050" loading="lazy"></div>
+        <div class="bd"><h3>Ferronnerie inox</h3><p>Inox, aluminium et acier : produits agricoles, ensembles mécano-soudés, montages de pièces industrielles.</p><span class="more">Découvrir →</span></div></a>
+      <a class="card" href="#mobilier"><div class="ph"><img src="assets/img/p2965-4.jpg" alt="" width="1400" height="1050" loading="lazy"></div>
+        <div class="bd"><h3>Mobilier</h3><p>Chaises, tables, mobilier de jardin : fabrication artisanale, sur-mesure réalisable.</p><span class="more">Découvrir →</span></div></a>
+    </div>
+  </div></section>
+
+  <section class="band band-soft"><div class="wrap split">
+    <div class="prose">
+      <span class="cap">L'entreprise</span>
+      <h2 style="color:var(--fg);font-size:clamp(1.5rem,2.8vw,2.1rem)">Un spécialiste de la chaudronnerie avec plus de 20 ans d'expérience en Lozère<span class="tbc">à confirmer</span></h2>
+      <p>Depuis plus de 20 ans, Lionnel Balez Soudure est spécialisé en chaudronnerie, ferronnerie et métallerie. Cela a permis à notre entreprise d'acquérir une forte technicité, notamment sur l'inox, l'alu et le métal. Nous sommes en mesure de réaliser tous les travaux de soudure et de vous accompagner sur tout type de projet. <strong>Nous travaillons avec les particuliers et avec les professionnels.</strong></p>
+      <p>Notre rôle est de vous conseiller dans votre projet de façon personnalisée. En fonction de vos besoins, nous réalisons un <strong>devis gratuit</strong>. Puis le travail demandé est réalisé de manière soignée et dans le respect des délais.</p>
+      <div class="btns"><a class="btn" href="#entreprise">En savoir plus sur l'entreprise</a></div>
+    </div>
+    <figure class="photo br"><img src="assets/img/p2781-47.jpg" alt="Raccord en té inox à brides" width="1400" height="1050" loading="lazy"></figure>
+  </div></section>
+
+  <section class="band"><div class="wrap split rev">
+    <div class="prose">
+      <span class="cap">Thermolaquage</span>
+      <h2 style="color:var(--fg);font-size:clamp(1.5rem,2.8vw,2.1rem)">Un expert en ferronnerie chaudronnerie thermolaquée à votre service à Marvejols et en Lozère</h2>
+      <p>Notre entreprise maîtrise la technique de thermolaquage<span class="tbc">en interne ou en sous-traitance ?</span> et peut vous la proposer pour la fabrication de vos pièces. Ce procédé apporte une bonne résistance aux chocs et à la corrosion, un excellent maintien des couleurs, un grand choix de teintes et d'effets.</p>
+      <div class="btns"><a class="btn" href="#thermolaquage">Le procédé en détail</a></div>
+    </div>
+    <figure class="photo tall br" style="justify-self:center"><img src="assets/img/p2866-49.jpg" alt="Escalier métallique noir à marches en porte-à-faux" width="1050" height="1400" loading="lazy"></figure>
+  </div></section>
+
+  <section class="band band-soft"><div class="wrap">
+    <div class="sec-head"><span class="cap">Références</span><h2>Nos références en chaudronnerie, ferronnerie et métallerie sur Mende, Marvejols et en Lozère</h2>
+      <p class="lead">Notre forte technicité nous a amenés à travailler avec des acteurs bien connus du secteur. Le site actuel cite :<span class="tbc">accord de citation à confirmer</span></p></div>
+    <ul class="refs">
+      <li>SDEE<small>Mende et Marvejols</small></li>
+      <li>Le Clos du Nid</li>
+      <li>Maison de retraite Saint-Martin<small>La Canourgue</small></li>
+      <li>Résidence Rey<small>Marvejols</small></li>
+      <li>Lycée et collège Notre-Dame<small>Marvejols</small></li>
+      <li>Plus de 200 réalisations chez les particuliers de Lozère<small>chiffre du site actuel, à confirmer</small></li>
+    </ul>
+  </div></section>
+
+  <section class="band band-char cta"><div class="wrap">
+    <div style="display:grid;gap:12px"><span class="cap">Un projet ? Parlons-en</span><h2>Conseils personnalisés et devis gratuit</h2>
+      <p style="color:var(--char-fg)">Du lundi au vendredi, de 8 h 00 à 18 h 30.</p></div>
+    <div style="display:grid;gap:14px;justify-items:start">
+      <a class="bigtel" href="tel:+33679935793">06 79 93 57 93</a>
+      <div class="btns"><a class="btn btn-green" href="tel:+33679935793"><svg aria-hidden="true"><use href="#i-tel"/></svg>Appeler</a><a class="btn" href="#contact">Tous les contacts</a></div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ========== ENTREPRISE ========== -->
+<div class="page" data-page="entreprise" data-title="L'entreprise" hidden>
+  <section class="pagehead"><div class="wrap">
+    <p class="crumbs"><a href="#accueil">Accueil</a> › L'entreprise</p>
+    <h1>Lionnel Balez Soudure, chaudronnerie, ferronnerie et métallerie à Antrenas</h1>
+    <p class="lead">Basé à Antrenas, près de Marvejols et Mende, Lionnel Balez Soudure est spécialisé en chaudronnerie, ferronnerie et métallerie.</p>
+  </div></section>
+  <section class="band"><div class="wrap split">
+    <div class="prose">
+      <span class="cap">Notre métier</span>
+      <h2 style="color:var(--fg);font-size:1.8rem">Un spécialiste de la chaudronnerie avec plus de 20 ans d'expérience en Lozère<span class="tbc">à confirmer</span></h2>
+      <p>Depuis plus de 20 ans, Lionnel Balez Soudure est spécialisé en chaudronnerie, ferronnerie et métallerie. Cela a permis à notre entreprise d'acquérir une forte technicité, notamment sur l'inox, l'alu et le métal. Nous sommes en mesure de réaliser tous les travaux de soudure et de vous accompagner sur tout type de projet. Nous travaillons avec les particuliers et avec les professionnels.</p>
+      <p>Notre rôle est de vous conseiller dans votre projet de façon personnalisée. En fonction de vos besoins, nous réalisons un devis gratuit. Puis nos équipes<span class="tbc">effectif à confirmer</span> réalisent le travail demandé de manière soignée et dans le respect des délais.</p>
+      <p>Notre savoir-faire nous permet de fabriquer toutes sortes de produits sur mesure. Nous sommes capables de travailler <strong>en neuf et en rénovation</strong>.</p>
+    </div>
+    <figure class="photo br"><img src="assets/img/p2781-13.jpg" alt="Camion-grue équipé de coffres en tôle d'aluminium larmée" width="1400" height="1052" loading="lazy"></figure>
+  </div></section>
+  <section class="band band-soft"><div class="wrap">
+    <div class="sec-head"><span class="cap">Savoir-faire</span><h2>Un savoir-faire reconnu en ferronnerie inox, alu et acier</h2></div>
+    <div class="facts">
+      <div class="fact"><h3>Trois métaux</h3><p>Lionnel Balez Soudure possède les compétences pour travailler l'inox, l'aluminium et l'acier.</p></div>
+      <div class="fact"><h3>Des ouvrages variés</h3><p>Produits agricoles, ensembles mécano-soudés, montages de pièces industrielles et bien d'autres produits.</p></div>
+      <div class="fact"><h3>Plusieurs procédés de soudage</h3><p>Pour répondre à tous vos besoins, avec un matériel adapté. Agrément de soudure en baguette et au TIG<span class="tbc">intitulé à confirmer</span>.</p></div>
+      <div class="fact"><h3>Équipements de protection</h3><p>Casque à souder, gants adaptés, protection antibruit, etc.</p></div>
+    </div>
+    <p class="prose" style="margin-top:22px">Selon la structure du métal choisi et la pièce à souder, nous sommes en mesure de vous proposer une solution parfaitement adaptée.</p>
+  </div></section>
+  <section class="band"><div class="wrap">
+    <div class="sec-head"><span class="cap">Nos engagements</span><h2>Ce que vous pouvez attendre</h2></div>
+    <div class="facts">
+      <div class="fact"><h3>Devis gratuit</h3><p>Établi en fonction de vos besoins.</p></div>
+      <div class="fact"><h3>Conseils personnalisés</h3><p>Pour choisir le métal, le procédé et la finition.</p></div>
+      <div class="fact"><h3>Travail soigné</h3><p>Fabrication artisanale ; sur-mesure réalisable.</p></div>
+      <div class="fact"><h3>Respect des délais</h3><p>Le travail est réalisé dans le respect des délais convenus.</p></div>
+      <div class="fact"><h3>Livraison gratuite de pièces sur site<span class="tbc">conditions à confirmer</span></h3><p>Formulation du site actuel.</p></div>
+    </div>
+  </div></section>
+</div>
+
+<!-- ========== CHAUDRONNERIE ========== -->
+<div class="page" data-page="chaudronnerie" data-title="Chaudronnerie" hidden>
+  <section class="pagehead"><div class="wrap">
+    <p class="crumbs"><a href="#accueil">Accueil</a> › Chaudronnerie</p>
+    <h1>Un expert de la chaudronnerie à votre service dans les environs de Marvejols en Lozère (48)</h1>
+    <p class="lead">Lionnel Balez Soudure, basé à Antrenas, près de Marvejols et Mende, est spécialisé dans le domaine de la chaudronnerie : aluminium et inox, pour les particuliers comme pour les professionnels.</p>
+  </div></section>
+  <section class="band"><div class="wrap">
+    <div class="sec-head"><span class="cap">Chaudronnerie aluminium</span><h2>Photos de la page actuelle (sélection)</h2></div>
+    <div class="gallery" data-set="chaud-alu"></div>
+  </div></section>
+  <section class="band band-soft"><div class="wrap">
+    <div class="sec-head"><span class="cap">Chaudronnerie inox</span><h2>Photos de la page actuelle (sélection)</h2></div>
+    <div class="gallery" data-set="chaud-inox"></div>
+    <p class="hint" style="margin-top:18px">La page actuelle compte 80 photos ; la démo n'en montre qu'une sélection, dans l'attente des autorisations.</p>
+  </div></section>
+  <section class="band"><div class="wrap" style="display:grid;gap:16px">
+    <span class="cap">Pour en savoir davantage</span>
+    <div class="related"><a href="#thermolaquage">Ferronnerie chaudronnerie thermolaquée</a><a href="#inox">Ferronnerie inox</a><a href="#mobilier">Mobilier</a><a href="#contact">Demander un devis gratuit</a></div>
+  </div></section>
+</div>
+
+<!-- ========== THERMOLAQUAGE ========== -->
+<div class="page" data-page="thermolaquage" data-title="Ferronnerie – chaudronnerie thermolaquée" hidden>
+  <section class="pagehead"><div class="wrap">
+    <p class="crumbs"><a href="#accueil">Accueil</a> › Ferronnerie – chaudronnerie thermolaquée</p>
+    <h1>Votre spécialiste de la ferronnerie chaudronnerie thermolaquée dans le secteur de Marvejols (48)</h1>
+    <p class="lead">Basé à Antrenas, près de Marvejols et de Mende, Lionnel Balez Soudure vous propose son savoir-faire en ferronnerie chaudronnerie thermolaquée.</p>
+  </div></section>
+  <section class="band"><div class="wrap split">
+    <div class="prose">
+      <span class="cap">Le procédé</span>
+      <h2 style="color:var(--fg);font-size:1.8rem">Qu'est-ce que le thermolaquage ?</h2>
+      <p>Le thermolaquage est un procédé de revêtement qui s'applique aux pièces métalliques. Cette technique non polluante consiste à recouvrir une pièce métallique d'une peinture en poudre grâce à un effet électrostatique.</p>
+      <p>La poudre, chargée positivement par un champ électrique, adhère à la pièce, qui est chargée négativement. Puis la pièce est chauffée au four afin de permettre la fusion et la polymérisation de la peinture en poudre.</p>
+      <p>Ce procédé apporte de nombreux avantages : une bonne résistance aux chocs, à la corrosion, un excellent maintien des couleurs avec un grand choix de teintes et d'effets. Cela permet également un revêtement uniforme et une surface dure.</p>
+      <p class="note">Poudre → charge électrostatique → cuisson → polymérisation</p>
+    </div>
+    <figure class="photo tall br" style="justify-self:center"><img src="assets/img/p2866-41.jpg" alt="Passerelle en caillebotis avec garde-corps" width="1050" height="1400" loading="lazy"></figure>
+  </div></section>
+  <section class="band band-soft"><div class="wrap">
+    <div class="sec-head"><span class="cap">Réalisations</span><h2>Ouvrages photographiés sur le site actuel</h2></div>
+    <div class="gallery" data-set="thermo"></div>
+    <p class="hint" style="margin-top:18px">La page actuelle compte 59 photos ; sélection en attente d'autorisation.</p>
+  </div></section>
+  <section class="band"><div class="wrap" style="display:grid;gap:16px">
+    <span class="cap">Voir aussi</span>
+    <div class="related"><a href="#chaudronnerie">Chaudronnerie</a><a href="#inox">Ferronnerie inox</a><a href="#mobilier">Mobilier</a><a href="#contact">Demander un devis gratuit</a></div>
+  </div></section>
+</div>
+
+<!-- ========== INOX ========== -->
+<div class="page" data-page="inox" data-title="Ferronnerie inox" hidden>
+  <section class="pagehead"><div class="wrap">
+    <p class="crumbs"><a href="#accueil">Accueil</a> › Ferronnerie inox</p>
+    <h1>Votre expert en ferronnerie inox à proximité de Marvejols et Mende en Lozère (48)</h1>
+    <p class="lead">Implanté à Antrenas, près de Marvejols et Mende, Lionnel Balez Soudure est spécialisé dans la ferronnerie inox.</p>
+  </div></section>
+  <section class="band"><div class="wrap split">
+    <div class="prose">
+      <span class="cap">Inox, alu et acier</span>
+      <h2 style="color:var(--fg);font-size:1.8rem">Un savoir-faire reconnu en ferronnerie inox, alu et acier</h2>
+      <p>Lionnel Balez Soudure possède les compétences pour travailler sur l'inox, l'aluminium et l'acier. Plusieurs procédés de soudage sont maîtrisés, avec un matériel adapté ; l'entreprise détient l'agrément de soudure en baguette et au TIG<span class="tbc">à confirmer</span>.</p>
+      <p>Selon la structure du métal choisi et la pièce à souder, nous sommes en mesure de vous proposer une solution parfaitement adaptée.</p>
+    </div>
+    <figure class="photo br"><img src="assets/img/p2939-10.jpg" alt="Garde-corps inox sur muret de terrasse" width="1400" height="1050" loading="lazy"></figure>
+  </div></section>
+  <section class="band band-soft"><div class="wrap">
+    <div class="sec-head"><span class="cap">Réalisations</span><h2>Ouvrages photographiés sur le site actuel</h2></div>
+    <div class="gallery" data-set="inox"></div>
+    <p class="hint" style="margin-top:18px">La page actuelle compte 21 photos ; sélection en attente d'autorisation.</p>
+  </div></section>
+  <section class="band"><div class="wrap" style="display:grid;gap:16px">
+    <span class="cap">Voir aussi</span>
+    <div class="related"><a href="#chaudronnerie">Chaudronnerie</a><a href="#thermolaquage">Ferronnerie chaudronnerie thermolaquée</a><a href="#mobilier">Mobilier</a><a href="#contact">Demander un devis gratuit</a></div>
+  </div></section>
+</div>
+
+<!-- ========== MOBILIER ========== -->
+<div class="page" data-page="mobilier" data-title="Mobilier" hidden>
+  <section class="pagehead"><div class="wrap">
+    <p class="crumbs"><a href="#accueil">Accueil</a> › Mobilier</p>
+    <h1>Votre spécialiste de la création de mobilier en acier, alu et inox dans les alentours de Marvejols (48)<span class="tbc">matériaux à confirmer</span></h1>
+    <p class="lead">Situé à Antrenas, à 5 km de Marvejols et à proximité de Mende, Lionnel Balez Soudure est spécialisé dans la création de mobilier.</p>
+  </div></section>
+  <section class="band"><div class="wrap split">
+    <div class="prose">
+      <span class="cap">Fabrication artisanale</span>
+      <h2 style="color:var(--fg);font-size:1.8rem">Création de mobilier en acier et en inox pour votre jardin</h2>
+      <p>Notre savoir-faire nous permet de fabriquer toutes sortes de produits sur mesure. Nous sommes capables de travailler en neuf et en rénovation.</p>
+      <p>En parallèle, nous fabriquons des mobiliers en acier et en inox : chaises, tables, mobilier de jardin, etc. <strong>La fabrication est artisanale et du sur-mesure est réalisable.</strong></p>
+      <p class="hint">Le site actuel indique « acier et inox » sur l'accueil et « alu et inox » sur cette page : la démo regroupe les deux en attendant confirmation.</p>
+    </div>
+    <figure class="photo br"><img src="assets/img/p2965-4.jpg" alt="Table basse en acier noir" width="1400" height="1050" loading="lazy"></figure>
+  </div></section>
+  <section class="band band-soft"><div class="wrap">
+    <div class="sec-head"><span class="cap">Réalisations</span><h2>Tables, chaises, jardinières, range-bûches</h2></div>
+    <div class="gallery" data-set="mobilier"></div>
+  </div></section>
+  <section class="band"><div class="wrap" style="display:grid;gap:16px">
+    <span class="cap">Voir aussi</span>
+    <div class="related"><a href="#chaudronnerie">Chaudronnerie</a><a href="#thermolaquage">Ferronnerie chaudronnerie thermolaquée</a><a href="#inox">Ferronnerie inox</a><a href="#contact">Demander un devis gratuit</a></div>
+  </div></section>
+</div>
+
+<!-- ========== RÉALISATIONS ========== -->
+<div class="page" data-page="realisations" data-title="Réalisations" hidden>
+  <section class="pagehead"><div class="wrap">
+    <p class="crumbs"><a href="#accueil">Accueil</a> › Réalisations</p>
+    <h1>Nos réalisations en chaudronnerie, ferronnerie et métallerie</h1>
+    <p class="lead">Les photos ci-dessous viennent des diaporamas du site actuel. Ce sont des réalisations de l'entreprise, sans image d'illustration. Leur publication définitive dépend de l'accord de l'entreprise et des propriétaires concernés.</p>
+  </div></section>
+  <section class="band"><div class="wrap">
+    <div class="filters" role="group" aria-label="Filtrer par savoir-faire">
+      <button type="button" data-filter="all" aria-pressed="true">Tout</button>
+      <button type="button" data-filter="chaud" aria-pressed="false">Chaudronnerie</button>
+      <button type="button" data-filter="thermo" aria-pressed="false">Thermolaquée</button>
+      <button type="button" data-filter="inox" aria-pressed="false">Inox</button>
+      <button type="button" data-filter="mobilier" aria-pressed="false">Mobilier</button>
+    </div>
+    <p class="status" id="galCount" aria-live="polite"></p>
+    <div class="gallery" data-set="all" id="galAll"></div>
+  </div></section>
+</div>
+
+<!-- ========== ZONE ========== -->
+<div class="page" data-page="zone" data-title="Zone d'intervention" hidden>
+  <section class="pagehead"><div class="wrap">
+    <p class="crumbs"><a href="#accueil">Accueil</a> › Zone d'intervention</p>
+    <h1>Zone d'intervention : Antrenas, Marvejols, Mende et la Lozère</h1>
+    <p class="lead">L'atelier est situé à L'Arjal, à Antrenas, à 5 km de Marvejols et à proximité de Mende.<span class="tbc">liste des communes à confirmer</span></p>
+  </div></section>
+  <section class="band"><div class="wrap split">
+    <div class="mapwrap">
+      <svg viewBox="0 0 420 300" role="img" aria-labelledby="mapT mapD">
+        <title id="mapT">Schéma des localités citées par le site</title>
+        <desc id="mapD">Schéma non à l'échelle : Antrenas, Marvejols, Mende et La Canourgue, en Lozère.</desc>
+        <rect x="1" y="1" width="418" height="298" rx="10" fill="#f5f6f5" stroke="#e1e5e2"/>
+        <g stroke="#cfd5d1" stroke-width="1" fill="none">
+          <path d="M20 60 Q140 40 260 70 T410 50"/><path d="M10 150 Q120 130 220 160 T410 140"/><path d="M10 240 Q150 220 250 250 T410 230"/>
+        </g>
+        <g stroke="#00ce6b" stroke-width="2" stroke-dasharray="5 6" fill="none" stroke-linecap="round">
+          <path d="M150 128 L182 108"/><path d="M182 108 L340 140"/><path d="M150 128 L92 220"/>
+        </g>
+        <g>
+          <circle cx="182" cy="108" r="11" fill="#00ce6b" stroke="#303030" stroke-width="2"/><text x="200" y="98" font-weight="700">Antrenas · atelier</text>
+          <circle cx="150" cy="128" r="6" fill="#303030"/><text x="70" y="140">Marvejols</text>
+          <circle cx="340" cy="140" r="6" fill="#303030"/><text x="352" y="145">Mende</text>
+          <circle cx="92" cy="220" r="6" fill="#303030"/><text x="104" y="236">La Canourgue</text>
+        </g>
+        <text x="16" y="286" style="font-size:11px;fill:#59615c">Schéma non à l'échelle · localités citées par le site actuel</text>
+      </svg>
+    </div>
+    <div class="prose">
+      <span class="cap">Localités citées sur le site actuel</span>
+      <ul style="margin:0;padding-left:1.1em;display:grid;gap:6px">
+        <li><strong>Antrenas</strong> : l'atelier, L'Arjal, 48100</li>
+        <li><strong>Marvejols</strong> : à 5 km</li>
+        <li><strong>Mende</strong> : à proximité</li>
+        <li><strong>La Canourgue</strong> : citée parmi les références</li>
+        <li>Et plus largement, <strong>la Lozère (48)</strong></li>
+      </ul>
+      <p>Le site actuel comporte un titre « Zone d'intervention » sans liste de communes ; celle-ci est à fournir par l'entreprise.</p>
+      <div class="btns"><a class="btn btn-green" href="https://www.google.com/maps/dir//44.578858,3.263881/" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg>Itinéraire vers l'atelier</a></div>
+      <p class="hint">Le lien ouvre Google Maps dans un nouvel onglet ; ce sont les coordonnées utilisées par le site actuel.</p>
+    </div>
+  </div></section>
+</div>
+
+<!-- ========== CONTACT ========== -->
+<div class="page" data-page="contact" data-title="Contact" hidden>
+  <section class="pagehead"><div class="wrap">
+    <p class="crumbs"><a href="#accueil">Accueil</a> › Contact</p>
+    <h1>Contactez Lionnel Balez Soudure</h1>
+    <p class="lead">Pour un conseil ou un devis gratuit, le plus simple est d'appeler pendant les horaires d'ouverture, ou d'écrire un e-mail en joignant une photo ou un croquis de votre projet.</p>
+  </div></section>
+  <section class="band"><div class="wrap contact-grid">
+    <div class="cbox main">
+      <h2>Téléphone</h2>
+      <a class="cval" href="tel:+33679935793" style="color:#fff;text-decoration:none">06 79 93 57 93</a>
+      <div class="btns"><a class="btn btn-green" href="tel:+33679935793"><svg aria-hidden="true"><use href="#i-tel"/></svg>Appeler</a>
+        <button class="copy" type="button" data-copy="06 79 93 57 93">Copier le numéro</button></div>
+      <p class="status" role="status"></p>
+      <p class="hint">Du lundi au vendredi, de 8 h 00 à 18 h 30.</p>
+    </div>
+    <div class="cbox">
+      <h2>E-mail</h2>
+      <a class="cval sm" href="mailto:lionnel.balez@gmail.com" style="color:var(--fg);text-decoration:none">lionnel.balez@gmail.com</a>
+      <div class="btns"><a class="btn" href="mailto:lionnel.balez@gmail.com?subject=Demande%20de%20devis"><svg aria-hidden="true"><use href="#i-mail"/></svg>Écrire un e-mail</a>
+        <button class="copy" type="button" data-copy="lionnel.balez@gmail.com">Copier l'adresse</button></div>
+      <p class="status" role="status"></p>
+      <p class="hint">Le bouton ouvre votre messagerie. Rien n'est envoyé depuis ce site.</p>
+    </div>
+    <div class="cbox">
+      <h2>Atelier</h2>
+      <p class="cval sm">L'Arjal<br>48100 Antrenas</p>
+      <div class="btns"><a class="btn" href="https://www.google.com/maps/dir//44.578858,3.263881/" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#i-pin"/></svg>Se rendre à l'atelier</a></div>
+      <p class="hint">Ouvre Google Maps dans un nouvel onglet.</p>
+    </div>
+    <div class="cbox">
+      <h2>Horaires</h2>
+      <p class="cval sm">Lundi au vendredi<br>8 h 00 – 18 h 30</p>
+      <h3 style="margin-top:8px">Facebook</h3>
+      <a href="https://www.facebook.com/profile.php?id=100008799216093" target="_blank" rel="noopener noreferrer">Page Facebook de Lionnel Balez Soudure</a>
+    </div>
+  </div></section>
+  <section class="band band-soft"><div class="wrap prose">
+    <span class="cap">Pour préparer votre demande</span>
+    <p>Indiquez le type d'ouvrage (chaudronnerie, ferronnerie thermolaquée, ferronnerie inox, mobilier), le métal souhaité (inox, alu, acier), les dimensions approximatives et le lieu.</p>
+    <p class="hint">Le site actuel propose un formulaire de contact. La démo le remplace par des liens directs : un formulaire non relié n'enverrait rien.</p>
+  </div></section>
+</div>
+
+<!-- ========== MENTIONS ========== -->
+<div class="page" data-page="mentions" data-title="Mentions légales" hidden>
+  <section class="pagehead"><div class="wrap">
+    <p class="crumbs"><a href="#accueil">Accueil</a> › Mentions légales</p>
+    <h1>Mentions légales</h1>
+    <p class="lead">Reprise des mentions du site actuel. Les éléments marqués « à confirmer » sont des corrections proposées, à valider par l'entreprise. Ce texte n'est pas un avis juridique.</p>
+  </div></section>
+  <section class="band"><div class="wrap legal">
+    <section><h2>Éditeur du site</h2>
+      <dl>
+        <dt>Raison sociale</dt><dd>Lionnel Balez Soudure</dd>
+        <dt>Responsable</dt><dd>Lionnel Balez</dd>
+        <dt>Forme juridique</dt><dd>Non indiquée sur le site actuel<span class="tbc">à compléter</span></dd>
+        <dt>Adresse</dt><dd>L'Arjal, 48100 Antrenas</dd>
+        <dt>Téléphone</dt><dd>06 79 93 57 93</dd>
+        <dt>E-mail</dt><dd>lionnel.balez@gmail.com</dd>
+        <dt>SIREN</dt><dd>798 322 863<span class="tbc">à confirmer</span></dd>
+        <dt>SIRET</dt><dd>798 322 863 00019 (indiqué « Siren » sur le site actuel)</dd>
+        <dt>TVA intracommunautaire</dt><dd>FR 92 798322863</dd>
+        <dt>Capital social</dt><dd>10 000,00 €<span class="tbc">à confirmer</span></dd>
+        <dt>Immatriculation RCS / RM</dt><dd>Non indiquée<span class="tbc">à compléter</span></dd>
+      </dl></section>
+    <section><h2>Hébergement</h2><p>L'hébergeur n'est pas mentionné sur le site actuel. Son nom, son adresse et son téléphone sont à ajouter<span class="tbc">à compléter</span>.</p></section>
+    <section><h2>Conditions d'utilisation</h2>
+      <p>L'éditeur met en œuvre tous les moyens dont il dispose pour assurer une information fiable et une mise à jour fiable du site. Des erreurs ou omissions peuvent toutefois survenir ; l'internaute est invité à vérifier l'exactitude des informations auprès de l'éditeur et à signaler toute erreur.</p>
+      <p>Les renseignements figurant sur le site ne sont pas exhaustifs et les photos ne sont pas contractuelles. Ils sont donnés sous réserve des modifications apportées depuis leur mise en ligne.</p></section>
+    <section><h2>Liens hypertextes</h2>
+      <p>Le site peut proposer des liens vers d'autres sites (Google Maps, Facebook). L'éditeur ne contrôle pas ces sites et ne répond pas de leur contenu ni de leur disponibilité.</p>
+      <p>Le site actuel demande que tout lien vers le site fasse l'objet d'une autorisation préalable de l'éditeur, par e-mail.</p></section>
+    <section><h2>Propriété intellectuelle</h2><p>Le logo, les textes et les photographies sont la propriété de leurs auteurs respectifs. Les photos de réalisations montrent des ouvrages chez des clients ; leur diffusion nécessite l'accord de l'entreprise et, le cas échéant, des propriétaires<span class="tbc">à valider</span>.</p></section>
+    <section><h2>Données personnelles</h2>
+      <p>Ce site ne comporte pas de formulaire : aucune donnée n'est collectée par le site lors d'un appel ou de l'envoi d'un e-mail depuis votre propre messagerie. Les informations que vous transmettez par téléphone ou par e-mail servent uniquement à répondre à votre demande.</p>
+      <p>Conformément au RGPD et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification et d'effacement de vos données, à exercer par e-mail à lionnel.balez@gmail.com. Vous pouvez saisir la CNIL (cnil.fr).<span class="tbc">rédaction à valider</span></p>
+      <p class="hint">La mention « Déclaration à la CNIL » du site actuel n'est plus en vigueur depuis le RGPD (2018). La recommandation du navigateur Internet Explorer a été retirée.</p></section>
+    <section><h2>Cookies</h2><p>Cette démonstration ne dépose aucun cookie de mesure d'audience. Si un outil statistique est ajouté au site définitif, un bandeau de consentement sera nécessaire<span class="tbc">à définir</span>.</p></section>
+    <section><h2>Démarchage téléphonique</h2><p>Le consommateur est informé qu'il peut s'inscrire sur la liste d'opposition au démarchage téléphonique sur bloctel.gouv.fr.</p></section>
+    <section><h2>Litiges</h2><p>Les présentes conditions sont régies par la loi française. Tout litige relève de la compétence des tribunaux dont dépend le siège social de l'entreprise. La langue de référence est le français.</p></section>
+  </div></section>
+</div>
+
+</main>
+
+<footer class="site"><div class="wrap">
+  <div class="cols">
+    <div><h2>Lionnel Balez Soudure</h2><p>L'Arjal<br>48100 Antrenas</p>
+      <img src="assets/img/logo.png" alt="" width="392" height="100" style="width:170px;background:#fff;border-radius:4px;padding:4px 6px;margin-top:14px"></div>
+    <div><h2>Nos horaires</h2><p>Lundi au vendredi<br>de 8:00 à 18:30</p></div>
+    <div><h2>Nous contacter</h2><ul>
+      <li><a href="tel:+33679935793">06 79 93 57 93</a></li>
+      <li><a href="mailto:lionnel.balez@gmail.com">lionnel.balez@gmail.com</a></li>
+      <li><a href="https://www.facebook.com/profile.php?id=100008799216093" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+      <li><a href="https://www.google.com/maps/dir//44.578858,3.263881/" target="_blank" rel="noopener noreferrer">Itinéraire vers l'atelier</a></li></ul></div>
+    <div><h2>Plan du site</h2><ul>
+      <li><a href="#entreprise">L'entreprise</a></li><li><a href="#chaudronnerie">Chaudronnerie</a></li><li><a href="#thermolaquage">Thermolaquage</a></li>
+      <li><a href="#inox">Ferronnerie inox</a></li><li><a href="#mobilier">Mobilier</a></li><li><a href="#realisations">Réalisations</a></li>
+      <li><a href="#zone">Zone d'intervention</a></li><li><a href="#mentions">Mentions légales</a></li></ul></div>
+  </div>
+  <div class="compare"><p><b>Comparer avec le site actuel.</b> Cette démo est une proposition&nbsp;; le site en ligne de l'entreprise reste celui-ci.</p>
+    <a class="btn btn-green" href="https://lionnelbalezsoudure.fr/" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>Voir le site actuel<span class="vh"> (nouvel onglet)</span></a></div>
+  <div class="legalline"><span>Lionnel Balez Soudure · SIRET 798 322 863 00019</span><span>Proposition de refonte non officielle · démonstration non indexée</span></div>
+</div></footer>
+
+<nav class="callbar" aria-label="Contact rapide">
+  <a href="tel:+33679935793"><svg aria-hidden="true"><use href="#i-tel"/></svg>Appeler</a>
+  <a href="mailto:lionnel.balez@gmail.com"><svg aria-hidden="true"><use href="#i-mail"/></svg>E-mail</a>
+  <a href="#contact"><svg aria-hidden="true"><use href="#i-pin"/></svg>Plan</a>
+</nav>
+
+<dialog class="lb" id="lb" aria-label="Photo agrandie">
+  <div class="lb-in">
+    <img id="lbImg" src="" alt="">
+    <div class="lb-bar">
+      <p><span id="lbCap"></span><small id="lbSrc"></small></p>
+      <div class="btns"><button class="btn" type="button" id="lbPrev" aria-label="Photo précédente">←</button><button class="btn" type="button" id="lbNext" aria-label="Photo suivante">→</button><button class="btn" type="button" id="lbClose">Fermer</button></div>
+    </div>
+  </div>
+</dialog>
+<script>
+(function(){
+  var SRC={chaud:'Chaudronnerie',thermo:'Ferronnerie – chaudronnerie thermolaquée',inox:'Ferronnerie inox',mobilier:'Mobilier'};
+  // Photos issues des diaporamas du site actuel (page, n° dans le diaporama) — toutes : autorisation à obtenir
+  var P=[
+    ['2781-2','chaud','alu','Remorque en aluminium',2],
+    ['2781-13','chaud','alu','Camion-grue équipé de coffres en tôle alu larmée',13],
+    ['2781-23','chaud','alu','Aménagement de camion : tiroirs et coffres',23],
+    ['2781-46','chaud','inox','Table inox sur roulettes',46],
+    ['2781-47','chaud','inox','Raccord en té inox à brides',47],
+    ['2781-62','chaud','inox','Équipement inox de cuisine professionnelle',62],
+    ['2781-65','chaud','inox','Plan de travail inox de cuisine professionnelle',65],
+    ['2781-70','chaud','inox','Margelle de piscine en inox',70],
+    ['2866-13','thermo','','Portail thermolaqué vert',13],
+    ['2866-21','thermo','','Grille de défense de fenêtre',21],
+    ['2866-41','thermo','','Passerelle en caillebotis avec garde-corps',41],
+    ['2866-49','thermo','','Escalier noir à marches en porte-à-faux',49],
+    ['2866-54','thermo','','Garde-corps avec vue sur la vallée',54],
+    ['2939-6','inox','','Garde-corps inox à barreaux sur terrasse',6],
+    ['2939-10','inox','','Garde-corps inox sur muret de terrasse',10],
+    ['2939-14','inox','','Balcon en ferronnerie sur maison en pierre',14],
+    ['2939-17','inox','','Garde-corps inox sur terrasse bois',17],
+    ['2939-21','inox','','Garde-corps inox, maison contemporaine',21],
+    ['2965-1','mobilier','','Jardinière en inox',1],
+    ['2965-3','mobilier','','Structures de chaises en métal',3],
+    ['2965-4','mobilier','','Table basse en acier noir',4],
+    ['2965-5','mobilier','','Range-bûches près d\'un poêle',5]
+  ];
+  var TALL={'2866-41':1,'2866-49':1,'2866-54':1,'2939-17':1,'2965-1':1};
+  var $=function(s,c){return (c||document).querySelector(s)}, $$=function(s,c){return [].slice.call((c||document).querySelectorAll(s))};
+
+  /* ---- galeries ---- */
+  var lbList=[], lbIdx=0, lb=$('#lb');
+  function build(el,items){
+    el.innerHTML='';
+    items.forEach(function(p,i){
+      var f=document.createElement('figure'); f.dataset.cat=p[1];
+      var b=document.createElement('button'); b.type='button'; b.setAttribute('aria-label','Agrandir : '+p[3]);
+      var im=document.createElement('img'); im.src='assets/img/p'+p[0]+'.jpg'; im.alt=p[3]; im.loading='lazy';
+      im.width=TALL[p[0]]?1050:1400; im.height=TALL[p[0]]?1400:1050;
+      b.appendChild(im); f.appendChild(b);
+      var c=document.createElement('figcaption'); c.textContent=p[3];
+      var s=document.createElement('span'); s.textContent='Site actuel, page '+SRC[p[1]]+', photo '+p[4]+' · autorisation à obtenir'; c.appendChild(s);
+      f.appendChild(c); el.appendChild(f);
+      b.addEventListener('click',function(){
+        var vis=items.filter(function(q,j){var fig=el.children[j];return !fig.hidden});
+        openLb(vis,vis.indexOf(p));
+      });
+    });
+  }
+  var sets={'chaud-alu':function(p){return p[1]==='chaud'&&p[2]==='alu'},'chaud-inox':function(p){return p[1]==='chaud'&&p[2]==='inox'},
+    thermo:function(p){return p[1]==='thermo'},inox:function(p){return p[1]==='inox'},mobilier:function(p){return p[1]==='mobilier'},all:function(){return true}};
+  $$('.gallery[data-set]').forEach(function(g){build(g,P.filter(sets[g.dataset.set]))});
+  function showLb(){var p=lbList[lbIdx]; var im=$('#lbImg'); im.src='assets/img/p'+p[0]+'.jpg'; im.alt=p[3];
+    $('#lbCap').textContent=p[3]+' ('+(lbIdx+1)+' / '+lbList.length+')';
+    $('#lbSrc').textContent='Site actuel, page '+SRC[p[1]]+', photo '+p[4]+' · autorisation à obtenir';}
+  function openLb(list,i){lbList=list;lbIdx=i;showLb();try{lb.showModal()}catch(e){lb.setAttribute('open','')} $('#lbClose').focus()}
+  function closeLb(){try{lb.close()}catch(e){lb.removeAttribute('open')}}
+  $('#lbClose').addEventListener('click',closeLb);
+  $('#lbPrev').addEventListener('click',function(){lbIdx=(lbIdx-1+lbList.length)%lbList.length;showLb()});
+  $('#lbNext').addEventListener('click',function(){lbIdx=(lbIdx+1)%lbList.length;showLb()});
+  lb.addEventListener('click',function(e){if(e.target===lb)closeLb()});
+  lb.addEventListener('keydown',function(e){if(e.key==='ArrowLeft')$('#lbPrev').click();if(e.key==='ArrowRight')$('#lbNext').click()});
+
+  /* ---- filtres réalisations ---- */
+  var galAll=$('#galAll');
+  function count(){var n=$$('figure',galAll).filter(function(f){return !f.hidden}).length;$('#galCount').textContent=n+' photo'+(n>1?'s':'')+' affichée'+(n>1?'s':'')}
+  $$('.filters button').forEach(function(b){b.addEventListener('click',function(){
+    $$('.filters button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});
+    var f=b.dataset.filter; $$('figure',galAll).forEach(function(fig){fig.hidden=!(f==='all'||fig.dataset.cat===f)}); count();
+  })});
+  count();
+
+  /* ---- copier ---- */
+  $$('.copy').forEach(function(b){b.addEventListener('click',function(){
+    var v=b.dataset.copy, st=b.closest('.cbox').querySelector('.status');
+    function fallback(){var el=b.closest('.cbox').querySelector('.cval');var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r);
+      st.textContent='Texte sélectionné : utilisez Copier de votre appareil.';}
+    try{navigator.clipboard.writeText(v).then(function(){st.textContent='Copié : '+v},fallback)}catch(e){fallback()}
+  })});
+
+  /* ---- menu mobile ---- */
+  var burger=$('.burger'), menu=$('#menu');
+  burger.addEventListener('click',function(){var o=menu.classList.toggle('open');burger.setAttribute('aria-expanded',o?'true':'false')});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&menu.classList.contains('open')){menu.classList.remove('open');burger.setAttribute('aria-expanded','false');burger.focus()}});
+
+  /* ---- routage par ancre ---- */
+  var pages=$$('.page'), names=pages.map(function(p){return p.dataset.page});
+  function route(){
+    var h=(location.hash||'').slice(1)||'accueil';
+    if(names.indexOf(h)<0)h='accueil';
+    pages.forEach(function(p){p.hidden=p.dataset.page!==h});
+    $$('nav.main a').forEach(function(a){if(a.getAttribute('href')==='#'+h)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+    document.title=$('.page[data-page="'+h+'"]').dataset.title+' · Lionnel Balez Soudure (démo)';
+    menu.classList.remove('open'); burger.setAttribute('aria-expanded','false');
+    window.scrollTo(0,0);
+    return h;
+  }
+  var first=true;
+  window.addEventListener('hashchange',function(){route(); var m=$('#contenu'); m.focus({preventScroll:true})});
+  route();
+})();
+</script>
+</body>
+</html>

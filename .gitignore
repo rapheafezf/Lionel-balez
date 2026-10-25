@@ -1,0 +1,8 @@
+img-source/
+work/
+source-raw/
+tools/
+shots/
+local/
+.DS_Store
+_*.html

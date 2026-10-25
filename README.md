@@ -20,3 +20,11 @@ cd nouveau-site && python3 -m http.server 8080
 - Les textes viennent du site actuel ; les chiffres, les références et l'agrément sont à confirmer par l'entreprise.
 - Les photos viennent des diaporamas du site actuel. Aucune autorisation de réutilisation n'a été obtenue : chaque photo est notée « autorisation à obtenir ».
 - Les pages sont marquées `noindex`.
+
+## Déploiement Vercel
+
+`vercel.json` lance `sh build.sh`, qui construit `dist/` :
+- `/` : le nouveau site ;
+- `/presentation/` : la présentation de la refonte.
+
+Toutes les réponses portent l'en-tête `X-Robots-Tag: noindex`.

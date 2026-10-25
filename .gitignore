@@ -2,7 +2,8 @@ img-source/
 work/
 source-raw/
 tools/
-shots/
+/shots/
 local/
 .DS_Store
 _*.html
+dist/
